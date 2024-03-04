@@ -1,0 +1,33 @@
+!读入节点风荷载时程数据并将其作用于光伏板振动分析
+*Create,dataread,mac
+
+NN=10000 !单点数据长度
+*DIM,W150,,63,NN !创建节点风荷载存储文件,default type is ARRAY, dimension 63*n[*1]
+*VREAD,WF,WF150.TXT,,JIK,NN,63 !先读入行，后读入列
+(10000F1.8)!读入格式，每行10000个数据，1个字节，数点后8位
+
+/SOLU$ALLSEL,ALL 
+ANTYPE,0
+NLGEOM,ON
+PSTRES,ON 
+SSTIF,ON
+NSUBST,1
+OUTREA,ALL,ALL  
+
+*DO,I,1,NN
+ TIME,I
+ *DO,II,1,63 
+  FDELE,ALL,ALL   
+  F,II+100,FZ,WF(II,I)
+  PSOLVE
+ *ENDDO
+*ENDDO
+FINISH
+                 
+  !动画查看变形结果
+!/POST1
+              
+                 
+ 
+  
+
