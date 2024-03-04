@@ -1,0 +1,39 @@
+R,2,191e-6,50/1.94E5      !导线实常数，截面积，初应变，施加535MPa初应力,找型时施加很小弹性模量
+R,3,35e-3               !板厚35mm
+!**********单元定义***********
+PI=3.1415926
+
+ET,1,LINK10      !只受拉,拉索材料          
+ET,3,shell181      !光伏板
+ET,4,mass21
+!Z轴为重力作用轴
+DENSOFTIE=7.85e3       !单位:kg/(m^3),即为立柱Q345密度
+
+
+!材料2-拉索F
+DEN_RATIO2=1
+MPTEMP,,,,,,,,  
+MPTEMP,1,0 
+MPDATA,EX,2,,1.95E11           !弹性模量：1.95e11 N/(m^2)，
+MPDATA,PRXY,2,,0.3
+MPDATA,DENS,2,,DEN_RATIO2*DENSOFTIE     !钢索密度7.864e3,单位：kg/(m^3)
+
+
+!材料3-光伏板
+DEN_RATIO3=0.0387         !光伏板密度与钢材密度之比
+MPTEMP,,,,,,,,  
+MPTEMP,1,0 
+MPDATA,EX,3,,0.72e10     !单位量纲：N/(m^2) 假定
+MPDATA,PRXY,3,,0.2
+MPDATA,DENS,3,,DEN_RATIO3*DENSOFTIE          !光伏板密度3.0425e2,单位:kg/(m^3)
+
+
+!************ 截面定义 ***************
+
+!拉索截面定义
+SECTYPE,2, LINK,, D0.6, 0        !主拉线,等效面积0.280mm2
+SECOFFSET, CENT 
+
+
+!光伏板截面定义
+SECTYPE, 3, SHELL     !光伏板

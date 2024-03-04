@@ -2,28 +2,177 @@
 
 ## 1.结构几何信息提取
 
-*software: cad, matlab, excel*
+***software: cad, matlab, excel***
 
 * 光伏板角点
 
   xyz，编号
 
-* 光伏板测压点
-
-  xyz，编号，控制面积
-
 * 光伏板索
 
 编号包括：风振实验的编号、matlab编号、apdl编号。apdl的编号需要设计，从而更方便后续加荷载、后处理等。
 
+数据格式：x_array (1,Nx); y_array(1,Ny)
+
+* 光伏板和索和立柱坐标分为三部分：
+
+  panelx_all, panely_all：一块板通过$3*5$个点，分成$2*4$ 个矩形，因此一共有$15*42=630$个panelnode点
+
+  cablex_all, cabley_all：索的点和panel重合，不重新定义
+
+  columnnodex, columnnodey：12个立柱点 
+
+  
+
+* 光伏板测压点
+
+  xyz，编号，控制面积
+
+测压计没有满布，部分光伏板没有测压点。风压分析时已进行插值，每块光伏板都有8个虚拟测压点。测压点采用插值后的虚拟测压点
+
 ## 2.有限元建模
 
-*software: apdl script*
+***software: use matlab to write apdl script***
 
-* 建立点node
-* 建立单元element
-* 建立约束
-* 找型
+### Establish Element Type, Real Constant, Material Props
+
+in the file `defineElementTypeConstantMaterial.txt`
+
+* **Element Type**
+
+  Cable: use apdl element type link10
+
+  Panel: use apdl element type shell181
+
+* **Real Constant**
+
+* **Material Props**
+
+```fortran
+R,2,191e-6,50/1.94E5      !导线实常数，截面积，初应变，施加535MPa初应力,找型时施加很小弹性模量
+R,3,35e-3               !板厚35mm
+!**********单元定义***********
+PI=3.1415926
+
+ET,1,LINK10      !只受拉,拉索材料          
+ET,3,shell181      !光伏板
+ET,4,mass21
+!Z轴为重力作用轴
+DENSOFTIE=7.85e3       !单位:kg/(m^3),即为立柱Q345密度
+!材料2-拉索F
+DEN_RATIO2=1
+MPTEMP,,,,,,,,  
+MPTEMP,1,0 
+MPDATA,EX,2,,1.95E11           !弹性模量：1.95e11 N/(m^2)，
+MPDATA,PRXY,2,,0.3
+MPDATA,DENS,2,,DEN_RATIO2*DENSOFTIE     !钢索密度7.864e3,单位：kg/(m^3)
+!材料3-光伏板
+DEN_RATIO3=0.0387         !光伏板密度与钢材密度之比
+MPTEMP,,,,,,,,  
+MPTEMP,1,0 
+MPDATA,EX,3,,0.72e10     !单位量纲：N/(m^2) 假定
+MPDATA,PRXY,3,,0.2
+MPDATA,DENS,3,,DEN_RATIO3*DENSOFTIE          !光伏板密度3.0425e2,单位:kg/(m^3)
+!************ 截面定义 ***************
+!拉索截面定义
+SECTYPE,2, LINK,, D0.6, 0        !主拉线,等效面积0.280mm2
+SECOFFSET, CENT 
+!光伏板截面定义
+SECTYPE, 3, SHELL     !光伏板
+```
+
+### Establish Geometry
+
+**APDL Script FileName:  `geometry.txt`**
+
+**Matlab Writer FileName: `writeNodeElement.m`**
+
+#### **Establish node**
+
+* loaded data type is array：x_array (1,Nx); y_array(1,Ny)
+
+* 光伏板和索和立柱坐标分为三部分：
+
+  panelx_all, panely_all：一块板通过$3*5$个点，分成$2*4$ 个矩形，因此一共有$15*42=630$个panelnode点
+
+  cablex_all, cabley_all：索的点和panel重合，不重新定义
+
+  columnnodex, columnnodey：12个立柱点 
+
+  Loaded File Name：`cablenodeCoordination.mat`, `columnnodeall.mat`, `panelnodeall.mat`
+
+  ![](D:\柔性光伏板_全\Photovoltaic-Panel-Wind-Vibration-Analysis\note\node_number.png)
+
+  ```matlab
+  % write the column nodes
+  arrayX = columnnodex;
+  arrayY = columnnodey;
+  arrayZ = zeros(1,numel(columnnodey));
+  for nodeNumber = 1:numel(columnnodey)
+      fprintf(fileID, 'N,%5d,%12.6f,%12.6f,%12.6f\n', nodeNumber,arrayX(nodeNumber),arrayY(nodeNumber),arrayZ(nodeNumber));
+  end
+  
+  % write the panel nodes
+  arrayX = panelx_all;
+  arrayY = panely_all;
+  arrayZ = zeros(1,numel(panely_all));
+  for nodeNumber = 1:numel(panely_all)
+      fprintf(fileID, 'N,%5d,%12.6f,%12.6f,%12.6f\n', nodeNumber+100,arrayX(nodeNumber),arrayY(nodeNumber),arrayZ(nodeNumber));
+  end
+  ```
+
+#### Establish Element
+
+Two element type: cable represented by link10 and panel represented by shell181
+
+Details are in ansys helper.
+
+```matlab
+% define the element options
+fprintf(fileID, "TYPE,1             !单元类型1，杆单元\n");
+fprintf(fileID, "MAT,2              !材料类型2\n");
+fprintf(fileID, "SECNUM,2           !截面类型2，拉索\n");
+fprintf(fileID, "REAL,2             !实常数2\n");
+
+% define the element entity of cable
+fprintf(fileID, "!define the element entity of cable\n");
+cablenodei = [1, [143:184],3, [143:184]+42*2, 5, [143:184]+42*5, 7, [143:184]+42*7, 9, [143:184]+42*10, 11, [143:184]+42*12];
+cablenodej = [[143:184],2, [143:184]+42*2, 4, [143:184]+42*5, 6, [143:184]+42*7, 8, [143:184]+42*10, 10, [143:184]+42*12, 12];
+for cableNo = 1: numel(cablenodej)
+    fprintf(fileID, "EN,%5d,%5d,%5d\n",cableNo,cablenodei(cableNo),cablenodej(cableNo));
+end
+
+% define the element options
+fprintf(fileID, "TYPE,3             !单元类型3，壳单元  \n");
+fprintf(fileID, "MAT,3              !材料类型1，Q345\n");
+fprintf(fileID, "REAL,3             !实常数3\n");
+fprintf(fileID, "SECNUM,3           !截面类型3\n");
+
+% define the element entity of panel
+%give four node to establish a rectangular, so basicrect1 represent an
+%basic rectangular. Than build all rectangular basicrect5.  
+basicrect1 = [101,102,144,143]';
+basicrect2 = [basicrect1, basicrect1+1];
+basicrect3 = [basicrect2, basicrect2+42, basicrect2+42*2, basicrect2+42*3];
+basicrect4 = basicrect3;
+for i = 1:13
+    basicrect4 = [basicrect4, basicrect3+3*i];
+end
+basicrect5 = [basicrect4, basicrect4+210,basicrect4+210*2];
+
+rect = basicrect5;
+for rectNo = 1:size(rect,2)
+    fprintf(fileID, "EN,%5d,%5d,%5d,%5d,%5d\n",rectNo+300,rect(1,rectNo), rect(2,rectNo), rect(3,rectNo), rect(4,rectNo));
+end
+```
+
+![elementmodel_all](D:\柔性光伏板_全\Photovoltaic-Panel-Wind-Vibration-Analysis\note\elementmodel_all.png)
+
+![elementmodel_detail](D:\柔性光伏板_全\Photovoltaic-Panel-Wind-Vibration-Analysis\note\elementmodel_detail.png)
+
+#### Establish Constrain
+
+### 找型
 
 ## 3.Establish Initial Conditions
 
@@ -186,7 +335,7 @@ Reads the wind load data from a text file named `WF150.TXT` into the array.
 
 The format `(10000F1.8)` specifies that each line of the file contains 10,000 floating-point numbers with one digit before the decimal and eight digits after the decimal.
 
-![vread-array](D:\graduateStudy\ansys_study\ansys_study\vread-array.png)
+![vread-array](vread-array.png)
 
 #### 5.1.2**Applying Loads and Solving**
 

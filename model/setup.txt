@@ -1,0 +1,16 @@
+FINISH                                                    
+/CLEAR
+/filename,PVmodel_2024_3_4,on
+/title,PVmodel
+/cwd, D:\ansysproj
+
+/PREP7   
+
+/COLOR,DEFAULT
+/RGB,INDEX,100,100,100,0
+/RGB,INDEX,80,80,80,13
+/RGB,INDEX,60,60,60,14
+/RGB,INDEX,0,0,0,15
+/UDOC,1,DATE,OFF
+/TRIAD,OFF
+/REPLOT 
