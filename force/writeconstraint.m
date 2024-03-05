@@ -33,6 +33,6 @@ end
 
 % add constraint to node set
 fprintf(fileID, 'D,ALL,ALL\n');
-
+fprintf(fileID, 'NSEL,all\n');
 %% close the file
 fclose(fileID);

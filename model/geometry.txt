@@ -1253,3 +1253,10 @@ EN,  633,  644,  645,  687,  686
 EN,  634,  645,  646,  688,  687
 EN,  635,  686,  687,  729,  728
 EN,  636,  687,  688,  730,  729
+
+!*********************!
+!  Remove redundant points, nodes, elements
+!*********************!
+nummrg,elem
+nummrg,node
+nummrg,kp

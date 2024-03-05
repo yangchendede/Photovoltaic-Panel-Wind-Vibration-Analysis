@@ -1,6 +1,6 @@
 # 风振计算 To Do List
 
-## 1.结构几何信息提取
+## 1.Extracting Structural Geometry Information
 
 ***software: cad, matlab, excel***
 
@@ -30,7 +30,7 @@
 
 测压计没有满布，部分光伏板没有测压点。风压分析时已进行插值，每块光伏板都有8个虚拟测压点。测压点采用插值后的虚拟测压点
 
-## 2.有限元建模
+## 2.Build the Model
 
 ***software: use matlab to write apdl script***
 
@@ -87,7 +87,7 @@ SECTYPE, 3, SHELL     !光伏板
 
 **Matlab Writer FileName: `writeNodeElement.m`**
 
-#### **Establish node**
+#### **Node**
 
 * loaded data type is array：x_array (1,Nx); y_array(1,Ny)
 
@@ -121,7 +121,7 @@ SECTYPE, 3, SHELL     !光伏板
   end
   ```
 
-#### Establish Element
+#### Element
 
 Two element type: cable represented by link10 and panel represented by shell181
 
@@ -170,21 +170,69 @@ end
 
 ![elementmodel_detail](D:\柔性光伏板_全\Photovoltaic-Panel-Wind-Vibration-Analysis\note\elementmodel_detail.png)
 
-### Establish Constrain
-
-
-
-### 找型
-
 ## 3.Establish Initial Conditions
 
 *software: in apdl script*
 
-## 4.Set Solution Controls
+* 预应力静力分析：悬索找型
+
+```fortran
+!*************************************!
+!               找型        
+!*************************************!
+*do,i,1,50
+/solu
+ALLSEL                   !选择全部
+ACEL,,,9.8,               !施加重力
+NLGEOM,1                 !考虑大变形效应                                                                                    
+TIME,1                   !设置载荷步时间
+AUTOTS,on                !采用自动时间步长
+KBC,0                    !指定载荷步为非阶跃方式
+SSTIF,on                 !在非线性分析中，激活应力刚度效应
+                 
+!outpr,basic,last       !out+print    output windows
+!outres,basic,last      !out+results
+solve                                                                                                
+finish  
+
+!/POST1
+!ALLSEL,ALL
+!PLNSOL,U,Z
+
+/SOLU
+UPCOORD,1,ON
+*enddo
+
+!*************************************!
+!      write emat file for psolve        
+!*************************************!
+!大变形有预应力静力分析
+/SOLU
+ANTYPE,0
+NLGEOM,ON !打开大变形效应
+PSTRES,ON !打开预应力效应
+EMATWRITE,YES !写出emat文件，pslove求解必用
+NSUBST,50 !设置荷载步
+OUTRES,ALL,ALL !设置结果输出频度
+SOLVE
+FINISH
+```
+
+* 初始位移、速度、加速度
+
+## 4. Applying Loads and Obtaining the Solution
+
+### Establish Constraint
+
+select node set. establish constraint
+
+
+
+### Specifying the Analysis Type and Analysis Options
 
 *software: apdl script*
 
-### Transient Analysis
+#### Transient Analysis
 
 ```fortran
 !*******************瞬态分析*********************
@@ -259,11 +307,11 @@ SOLVE
 
   Specifies whether to use automatic time stepping or load stepping.
 
-### Static Analysis
+#### Static Analysis
 
 ```fortran
 /SOLU$ALLSEL,ALL 
-ANTYPE,0
+ANTYPE,trans
 NLGEOM,ON
 PSTRES,ON 
 SSTIF,ON
@@ -278,9 +326,31 @@ OUTREA,ALL,ALL
 - `NSUBST,1`: Sets the number of substeps. This might need adjustment based on the analysis requirements.
 - `OUTREA,ALL,ALL`: Specifies that all results should be output for all substeps.
 
-## 5.Apply the Loads
+#### Modal Analysis with PreStress
 
-### 5.1Use APDL Loop
+```fortran
+/SOLU !模态分析
+ANTYPE,MODAL
+UPCOORD,1,ON
+PSTRES,ON
+MODOPT,LANB,20
+MXPAND,20
+PSOLVE,EIGLANB
+FINISH
+/SOLU !模态扩展
+EXPASS,ON
+PSOLVE,EIGEXP
+```
+
+* **UPCOORD**, FACTOR, Key
+  Modifies the coordinates of the active set of nodes, based on the current displacements.
+* **PSOLVE**
+  - The `PSOLVE` command is specifically used for solving prestressed analysis steps, particularly useful in subsequent analyses that need to consider prestress effects, such as prestressed modal analysis.
+  - Before using `PSOLVE`, a static analysis step to generate the prestress effects is usually performed. Then, `PSOLVE` is used for the subsequent analysis that incorporates these prestress effects.
+
+### Apply Load
+
+#### Use APDL Loop
 
 ```fortran
 NN=10000 !单点数据长度
@@ -310,7 +380,7 @@ FINISH
 !/POST1
 ```
 
-#### **5.1.1Reading Wind Load Time History Data:**
+##### **Reading Wind Load Time History Data:**
 
 * **Create,dataread,macro**
 
@@ -339,7 +409,7 @@ The format `(10000F1.8)` specifies that each line of the file contains 10,000 fl
 
 ![vread-array](vread-array.png)
 
-#### 5.1.2**Applying Loads and Solving**
+##### **Applying Loads and Solving**
 
 The nested `*DO` loops iterate over each time step (`I`) and each node (`II`). Within each iteration, the script:
 
@@ -347,7 +417,7 @@ The nested `*DO` loops iterate over each time step (`I`) and each node (`II`). W
 - Applies a force in the Z direction (`FZ`) to each node (`II+100`) using the wind load data from the `W150` array.
 - Solves the analysis for each time step with `PSOLVE`.
 
-### 5.2 Write APDL Script by Matlab
+#### Write APDL Script by Matlab
 
 ```matlab
 % tanggui's code H:\煤棚抗风动力可靠度分析20200608\ansys有限元计算

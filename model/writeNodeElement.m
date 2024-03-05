@@ -94,5 +94,19 @@ for rectNo = 1:size(rect,2)
     fprintf(fileID, "EN,%5d,%5d,%5d,%5d,%5d\n",rectNo+300,rect(1,rectNo), rect(2,rectNo), rect(3,rectNo), rect(4,rectNo));
 end
 % write the pressure nodes
+% apply surface force, do not need pressure nodes
+
+%% Remove redundant points, nodes, elements...
+fprintf(fileID, "\n!*********************!\n");
+fprintf(fileID, "!  Remove redundant points, nodes, elements\n");
+fprintf(fileID, "!*********************!\n");
+
+fprintf(fileID, "nummrg,elem\n");
+fprintf(fileID, "nummrg,node\n");
+fprintf(fileID, "nummrg,kp\n");
+
+
+
+
 %% close the file
 fclose(fileID);
