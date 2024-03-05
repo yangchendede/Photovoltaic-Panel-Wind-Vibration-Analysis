@@ -1,0 +1,17 @@
+!*********************!
+!establish the constraint
+!*********************!
+/SOL
+NSEL,S,NODE,,    1
+NSEL,A,NODE,,    2
+NSEL,A,NODE,,    3
+NSEL,A,NODE,,    4
+NSEL,A,NODE,,    5
+NSEL,A,NODE,,    6
+NSEL,A,NODE,,    7
+NSEL,A,NODE,,    8
+NSEL,A,NODE,,    9
+NSEL,A,NODE,,   10
+NSEL,A,NODE,,   11
+NSEL,A,NODE,,   12
+D,ALL,ALL
