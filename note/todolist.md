@@ -81,7 +81,7 @@ SECOFFSET, CENT
 SECTYPE, 3, SHELL     !光伏板
 ```
 
-### Establish Geometry
+### 3Establish Geometry
 
 **APDL Script FileName:  `geometry.txt`**
 
@@ -101,7 +101,7 @@ SECTYPE, 3, SHELL     !光伏板
 
   Loaded File Name：`cablenodeCoordination.mat`, `columnnodeall.mat`, `panelnodeall.mat`
 
-  ![](D:\柔性光伏板_全\Photovoltaic-Panel-Wind-Vibration-Analysis\note\node_number.png)
+  ![](node_number.png)
 
   ```matlab
   % write the column nodes
@@ -166,15 +166,15 @@ for rectNo = 1:size(rect,2)
 end
 ```
 
-![elementmodel_all](D:\柔性光伏板_全\Photovoltaic-Panel-Wind-Vibration-Analysis\note\elementmodel_all.png)
+![elementmodel_all](elementmodel_all.png)
 
-![elementmodel_detail](D:\柔性光伏板_全\Photovoltaic-Panel-Wind-Vibration-Analysis\note\elementmodel_detail.png)
+![elementmodel_detail](elementmodel_detail.png)
 
-## 3.Establish Initial Conditions
+## 4.Establish Initial Conditions
 
 *software: in apdl script*
 
-* 预应力静力分析：悬索找型
+* 预应力大变形静力分析：悬索找型
 
 ```fortran
 !*************************************!
@@ -218,11 +218,11 @@ SOLVE
 FINISH
 ```
 
-![找型result](D:\柔性光伏板_全\Photovoltaic-Panel-Wind-Vibration-Analysis\note\找型result.png)
+![找型result](找型result.png)
 
 * 初始位移、速度、加速度
 
-## 4. Applying Loads and Obtaining the Solution
+## 5. Applying Loads and Obtaining the Solution
 
 ### Establish Constraint
 
@@ -351,7 +351,7 @@ PSOLVE,EIGEXP
   - Before using `PSOLVE`, a static analysis step to generate the prestress effects is usually performed. Then, `PSOLVE` is used for the subsequent analysis that incorporates these prestress effects.
 * 如果要在后处理器查看阵型，则必须使用模态扩展
 
-![大变形模态分析](D:\柔性光伏板_全\Photovoltaic-Panel-Wind-Vibration-Analysis\note\大变形模态分析.png)
+![大变形模态分析](大变形模态分析.png)
 
 
 
@@ -359,7 +359,7 @@ PSOLVE,EIGEXP
 
   因为这里有三个独立的光伏板，所以所有同阶模态会有三个，因此，如果想知道前20阶模态，需要设置求解前60阶，才能得到20个独立的模态。
 
-  ![modal result](D:\柔性光伏板_全\Photovoltaic-Panel-Wind-Vibration-Analysis\note\modal result.png)
+  ![modal result](modal result.png)
 
 * **查看结果方法**
 
@@ -378,74 +378,9 @@ PSOLVE,EIGEXP
 
 ### Apply Load
 
-#### Use APDL Loop
+#### Write APDL Script by Matlab （Recommand)
 
-```fortran
-NN=10000 !单点数据长度
-*DIM,W150,,63,NN !创建节点风荷载存储文件,default type is ARRAY, dimension 63*n[*1]
-*VREAD,WF,WF150.TXT,,JIK,NN,63 !先读入行，后读入列
-(10000F1.8)!读入格式，每行10000个数据，1个字节，数点后8位
-
-/SOLU$ALLSEL,ALL 
-ANTYPE,0
-NLGEOM,ON
-PSTRES,ON 
-SSTIF,ON
-NSUBST,1
-OUTREA,ALL,ALL  
-
-*DO,I,1,NN
- TIME,I
- *DO,II,1,63 
-  FDELE,ALL,ALL   
-  F,II+100,FZ,WF(II,I)
-  PSOLVE
- *ENDDO
-*ENDDO
-FINISH
-                 
-  !动画查看变形结果
-!/POST1
-```
-
-##### **Reading Wind Load Time History Data:**
-
-* **Create,dataread,macro**
-
-**Macros are a sequence of Mechanical APDL commands stored in a file.** Macros should not have the same name as an existing Mechanical APDL command, or start with the first four characters of a Mechanical APDL command, because Mechanical APDL executes the internal command instead of the macro. 
-
-* **\*DIM,W150,,63,NN** 
-
-`*DIM, Par, Type, IMAX, JMAX, KMAX, Var1, Var2, Var3, CSYSID `
-Defines an array parameter and its dimensions.
-
-创建节点风荷载存储文件`W150`,default type is ARRAY, dimension $63*NN[*1]$
-
-* ***VREAD,WF,WF150.TXT,,JIK,NN,63**
-
-> You can fill an array from a data file via the *VREAD command. The command reads information from an ASCII data file and begins writing it into the array, starting with the index location that you specify. You can control the format of the information read from the file through data descriptors. The data descriptors must be enclosed in parenthesis and placed on the line following the *VREAD command. See Vector Operations for more information about data descriptors. The data descriptors control the number of fields to be read from each record, the width of the data fields, and the position of the decimal point in the field.
-
-```
-*VREAD, ParR, Fname, Ext, --, Label, n1, n2, n3, NSKIP
-```
-
-Reads data and produces an array parameter vector or matrix.
-
-Reads the wind load data from a text file named `WF150.TXT` into the array.
-
-The format `(10000F1.8)` specifies that each line of the file contains 10,000 floating-point numbers with one digit before the decimal and eight digits after the decimal.
-
-![vread-array](vread-array.png)
-
-##### **Applying Loads and Solving**
-
-The nested `*DO` loops iterate over each time step (`I`) and each node (`II`). Within each iteration, the script:
-
-- Deletes all previously applied loads with `FDELE,ALL,ALL`.
-- Applies a force in the Z direction (`FZ`) to each node (`II+100`) using the wind load data from the `W150` array.
-- Solves the analysis for each time step with `PSOLVE`.
-
-#### Write APDL Script by Matlab
+##### Example
 
 ```matlab
 % tanggui's code H:\煤棚抗风动力可靠度分析20200608\ansys有限元计算
@@ -526,4 +461,78 @@ KBC, ...           	! Stepped or ramped loads
 LSWRITE            	! Write load data to load step file
 Etc.
 ```
+
+##### Todo
+
+* up mimus down to get net pressure
+* get mapping relation between pressure data order and apdl node number
+* define time steps
+* write each time step's force to apdl script
+
+#### Use APDL Loop
+
+```fortran
+NN=10000 !单点数据长度
+*DIM,W150,,63,NN !创建节点风荷载存储文件,default type is ARRAY, dimension 63*n[*1]
+*VREAD,WF,WF150.TXT,,JIK,NN,63 !先读入行，后读入列
+(10000F1.8)!读入格式，每行10000个数据，1个字节，数点后8位
+
+/SOLU$ALLSEL,ALL 
+ANTYPE,0
+NLGEOM,ON
+PSTRES,ON 
+SSTIF,ON
+NSUBST,1
+OUTREA,ALL,ALL  
+
+*DO,I,1,NN
+ TIME,I
+ *DO,II,1,63 
+  FDELE,ALL,ALL   
+  F,II+100,FZ,WF(II,I)
+  PSOLVE
+ *ENDDO
+*ENDDO
+FINISH
+                 
+  !动画查看变形结果
+!/POST1
+```
+
+##### **Reading Wind Load Time History Data:**
+
+* **Create,dataread,macro**
+
+**Macros are a sequence of Mechanical APDL commands stored in a file.** Macros should not have the same name as an existing Mechanical APDL command, or start with the first four characters of a Mechanical APDL command, because Mechanical APDL executes the internal command instead of the macro. 
+
+* **\*DIM,W150,,63,NN** 
+
+`*DIM, Par, Type, IMAX, JMAX, KMAX, Var1, Var2, Var3, CSYSID `
+Defines an array parameter and its dimensions.
+
+创建节点风荷载存储文件`W150`,default type is ARRAY, dimension $63*NN[*1]$
+
+* ***VREAD,WF,WF150.TXT,,JIK,NN,63**
+
+> You can fill an array from a data file via the *VREAD command. The command reads information from an ASCII data file and begins writing it into the array, starting with the index location that you specify. You can control the format of the information read from the file through data descriptors. The data descriptors must be enclosed in parenthesis and placed on the line following the *VREAD command. See Vector Operations for more information about data descriptors. The data descriptors control the number of fields to be read from each record, the width of the data fields, and the position of the decimal point in the field.
+
+```
+*VREAD, ParR, Fname, Ext, --, Label, n1, n2, n3, NSKIP
+```
+
+Reads data and produces an array parameter vector or matrix.
+
+Reads the wind load data from a text file named `WF150.TXT` into the array.
+
+The format `(10000F1.8)` specifies that each line of the file contains 10,000 floating-point numbers with one digit before the decimal and eight digits after the decimal.
+
+![vread-array](vread-array.png)
+
+##### **Applying Loads and Solving**
+
+The nested `*DO` loops iterate over each time step (`I`) and each node (`II`). Within each iteration, the script:
+
+- Deletes all previously applied loads with `FDELE,ALL,ALL`.
+- Applies a force in the Z direction (`FZ`) to each node (`II+100`) using the wind load data from the `W150` array.
+- Solves the analysis for each time step with `PSOLVE`.
 
