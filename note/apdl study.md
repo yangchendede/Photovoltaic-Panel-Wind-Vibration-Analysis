@@ -229,8 +229,6 @@ fclose(fid1_output);
 clear Data_forward Data_backward;
 ```
 
-*
-
 ### what is array?
 
 > This type is similar to FORTRAN arrays and is the default array type when dimensioning arrays. As with FORTRAN arrays, the indices for rows, columns, and planes are sequential integer numbers beginning with one. Array elements can be either integers or real numbers.

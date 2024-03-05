@@ -363,7 +363,18 @@ PSOLVE,EIGEXP
 
 * **查看结果方法**
 
-  问gpt
+  ```fortran
+  !**************************!
+  ! run code after modal analysis
+  !**************************!
+  /POST1
+  SET,LIST !表格形式查看所有固有频率（大变形预应力后的固有频率）
+  
+  /REPLO  
+  SET,LIST,999
+  SET,,, ,,, ,10  !选择第10阶模态
+  PLDISP,0        !绘制模态变形图
+  ```
 
 ### Apply Load
 
