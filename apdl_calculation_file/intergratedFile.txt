@@ -1,6 +1,6 @@
 FINISH                                                    
 /CLEAR
-/filename,PVmodel_2024_3_4,on
+/filename,PVmodel_finish_modalAnalysis,on
 /title,PVmodel
 /cwd, D:\ansysproj
 
@@ -1382,3 +1382,18 @@ NSUBST,50 !设置荷载步
 OUTRES,ALL,ALL !设置结果输出频度
 SOLVE
 FINISH
+!*************************************!
+!           modal analysis        
+!*************************************!
+/SOLU !modal analysis
+ANTYPE,MODAL
+UPCOORD,1,ON
+PSTRES,ON
+MODOPT,LANB,60
+MXPAND,60
+PSOLVE,EIGLANB
+FINISH
+/SOLU !modal extension
+EXPASS,ON
+PSOLVE,EIGEXP
+finish

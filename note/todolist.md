@@ -218,6 +218,8 @@ SOLVE
 FINISH
 ```
 
+![找型result](D:\柔性光伏板_全\Photovoltaic-Panel-Wind-Vibration-Analysis\note\找型result.png)
+
 * 初始位移、速度、加速度
 
 ## 4. Applying Loads and Obtaining the Solution
@@ -347,6 +349,21 @@ PSOLVE,EIGEXP
 * **PSOLVE**
   - The `PSOLVE` command is specifically used for solving prestressed analysis steps, particularly useful in subsequent analyses that need to consider prestress effects, such as prestressed modal analysis.
   - Before using `PSOLVE`, a static analysis step to generate the prestress effects is usually performed. Then, `PSOLVE` is used for the subsequent analysis that incorporates these prestress effects.
+* 如果要在后处理器查看阵型，则必须使用模态扩展
+
+![大变形模态分析](D:\柔性光伏板_全\Photovoltaic-Panel-Wind-Vibration-Analysis\note\大变形模态分析.png)
+
+
+
+* **前7阶模态结果**
+
+  因为这里有三个独立的光伏板，所以所有同阶模态会有三个，因此，如果想知道前20阶模态，需要设置求解前60阶，才能得到20个独立的模态。
+
+  ![modal result](D:\柔性光伏板_全\Photovoltaic-Panel-Wind-Vibration-Analysis\note\modal result.png)
+
+* **查看结果方法**
+
+  问gpt
 
 ### Apply Load
 

@@ -1,0 +1,16 @@
+
+!*************************************!
+!           modal analysis        
+!*************************************!
+/SOLU !modal analysis
+ANTYPE,MODAL
+UPCOORD,1,ON
+PSTRES,ON
+MODOPT,LANB,60
+MXPAND,60
+PSOLVE,EIGLANB
+FINISH
+/SOLU !modal extension
+EXPASS,ON
+PSOLVE,EIGEXP
+finish

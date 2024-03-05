@@ -1,6 +1,6 @@
 FINISH                                                    
 /CLEAR
-/filename,PVmodel_2024_3_4,on
+/filename,PVmodel_finish_modalAnalysis,on
 /title,PVmodel
 /cwd, D:\ansysproj
 
