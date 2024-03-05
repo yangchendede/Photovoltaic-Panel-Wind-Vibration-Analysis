@@ -465,9 +465,23 @@ Etc.
 ##### Todo
 
 * up mimus down to get net pressure
+
 * get mapping relation between pressure data order and apdl node number
+
+  stored in `pressurenumbermapping.mat`
+
 * define time steps
+
 * write each time step's force to apdl script
+
+##### apply surface load on shell181 element
+
+Pressures
+	face 1 (I-J-K-L) (bottom, in +N direction),
+	face 2 (I-J-K-L) (top, in -N direction),
+	face 3 (J-I), face 4 (K-J), face 5 (L-K), face 6 (I-L)
+
+![shell181define](shell181define.png)
 
 #### Use APDL Loop
 
