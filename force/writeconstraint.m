@@ -20,7 +20,7 @@ end
 
 %% write the constraint
 
-fprintf(fileID, "!*********************!\n");
+fprintf(fileID, "\n!*********************!\n");
 fprintf(fileID, "!establish the constraint\n");
 fprintf(fileID, "!*********************!\n");
 fprintf(fileID, "/SOL\n");

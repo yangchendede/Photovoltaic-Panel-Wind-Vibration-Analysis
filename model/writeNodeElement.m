@@ -26,8 +26,8 @@ if fileID == -1
 end
 %% write the node
 
-fprintf(fileID, "/PREP7\n");
-fprintf(fileID, "!*********************!\n");
+fprintf(fileID, "\n/PREP7\n");
+fprintf(fileID, "\n!*********************!\n");
 fprintf(fileID, "!   build the node\n");
 fprintf(fileID, "!*********************!\n");
 
@@ -53,7 +53,7 @@ end
 
 %% write the element
 
-fprintf(fileID, "!*********************!\n");
+fprintf(fileID, "\n!*********************!\n");
 fprintf(fileID, "!  build the element\n");
 fprintf(fileID, "!*********************!\n");
 
