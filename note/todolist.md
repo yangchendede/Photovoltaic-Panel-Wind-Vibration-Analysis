@@ -583,3 +583,32 @@ The nested `*DO` loops iterate over each time step (`I`) and each node (`II`). W
 - Applies a force in the Z direction (`FZ`) to each node (`II+100`) using the wind load data from the `W150` array.
 - Solves the analysis for each time step with `PSOLVE`.
 
+
+
+## 6Post Processing
+
+### read and show result
+
+**read results**
+
+1. run `/post1` into general processing part
+
+2. read results
+
+   ![readresult](readresult.png)
+
+**show results**
+
+two ways: plot and list
+
+![showresult](showresult.png)
+
+### More information
+
+* how to show some node or element result?
+* how to show specific node or element result?
+* how to show min\max etc. result?
+
+*check the ANSYS Helper*
+
+![helper_post1](helper_post1.png)

@@ -24,7 +24,11 @@
 
 * **modalAnalysis**
 
-  analyze modal
+  apdl modal analysis options
+
+* **transientAnalysis**
+
+  apdl transient analysis options
 
 * **model**
 
@@ -41,3 +45,4 @@
   建立约束后悬索找型，模态分析前
 
 * **result**
+
