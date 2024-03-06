@@ -17,7 +17,7 @@ loadN = numel(pressureNlist);
 %% load pressure
 
 %% calculte pressure should be applied
-pressure = rand(loadN, timeNum)*1000;
+pressure = rand(loadN, timeNum)*10;
 
 %% load 336 net pressure to 336 element surface
 
@@ -51,21 +51,19 @@ for wangle = 1:1
 %     load
 timeNum = 20
     for tt = 1:timeNum
-%         fprintf(fileID,'TIME,%12.6f\n',t(tt)); %set time step
-        fprintf(fileID,'TIME,%5d\n',t(tt)); %set time step
+        fprintf(fileID,'TIME,%12.6f\n',t(tt)); %set time step
         fprintf(fileID,'NSUBST,1,,,1\nKBC,0\n'); 
         %NSUBST: Specifies the number of substeps to be taken this load step.
         %KBC: Specifies ramped or stepped loading within a load step.
 %         for pressurei = 1:loadN
         for pressurei = 8:8
             % SFE, Elem, LKEY, Lab, KVAL, VAL1, VAL2, VAL3, VAL4
-%             fprintf(fileID,'SFE,%5d,%5d,PRES,1,%12.6f\n',loadElementlist(pressurei), 1,pressure(pressurei,tt));
-            fprintf(fileID,'F,%d,FZ,%12.6f\n',105,pressure(pressurei,tt));
+            fprintf(fileID,'SFE,%5d,%5d,PRES,1,%12.6f\n',loadElementlist(pressurei), 1,pressure(pressurei,tt));
+            fprintf(fileID,'F,%d,FY,%12.6f\n',loadPoint(i),windForce(i,tt));
         end
-        fprintf(fileID,'SOLVE\n');
+%         fprintf(fileID,'PSOLVE\n');
 %             fprintf(fileID,'LSWRITE\n');
     end
-%     fprintf(fileID,'LSWRITE\n');
 %     fprintf(fileID,'PSOLVE\n');
 end
 

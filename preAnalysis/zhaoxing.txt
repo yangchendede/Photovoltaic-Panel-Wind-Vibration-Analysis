@@ -5,7 +5,7 @@
 *do,i,1,50
 /solu
 ALLSEL                   !选择全部
-ACEL,,,9.8,               !施加重力
+ACEL,,,-9.8,               !施加重力
 NLGEOM,1                 !考虑大变形效应                                                                                    
 TIME,1                   !设置载荷步时间
 AUTOTS,on                !采用自动时间步长

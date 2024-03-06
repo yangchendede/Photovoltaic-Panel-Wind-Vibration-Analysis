@@ -2,18 +2,61 @@
 !*********************!
 ! transient analysis options
 !*********************!
-/sol
 /SOLU
 ALLSEL,ALL 
 ANTYPE,trans
-!TRNOPT,MSUP,45,,,,,YES
+TRNOPT,MSUP,45,,,,,YES
 TRNOPT,FULL
 ACEL,,,-9.800
-NLGEOM,ON ! 大变形效应只有在瞬态分析完全法中才能使用
+!NLGEOM,ON !大变形效应只有在瞬态分析完全法中才能使用
 AUTOTS, ON
-PSTRES,ON ！打开预应力效应
+PSTRES,ON !打开预应力效应
 SSTIF,ON !打开应力钢化效应
 NSUBST,1
 OUTRES,ALL,ALL
+MDAMP,    1,    0.050000
+MDAMP,    2,    0.050000
+MDAMP,    3,    0.050000
+MDAMP,    4,    0.050000
+MDAMP,    5,    0.050000
+MDAMP,    6,    0.050000
+MDAMP,    7,    0.050000
+MDAMP,    8,    0.050000
+MDAMP,    9,    0.050000
+MDAMP,   10,    0.050000
+MDAMP,   11,    0.050000
+MDAMP,   12,    0.050000
+MDAMP,   13,    0.050000
+MDAMP,   14,    0.050000
+MDAMP,   15,    0.050000
+MDAMP,   16,    0.050000
+MDAMP,   17,    0.050000
+MDAMP,   18,    0.050000
+MDAMP,   19,    0.050000
+MDAMP,   20,    0.050000
+MDAMP,   21,    0.050000
+MDAMP,   22,    0.050000
+MDAMP,   23,    0.050000
+MDAMP,   24,    0.050000
+MDAMP,   25,    0.050000
+MDAMP,   26,    0.050000
+MDAMP,   27,    0.050000
+MDAMP,   28,    0.050000
+MDAMP,   29,    0.050000
+MDAMP,   30,    0.050000
+MDAMP,   31,    0.050000
+MDAMP,   32,    0.050000
+MDAMP,   33,    0.050000
+MDAMP,   34,    0.050000
+MDAMP,   35,    0.050000
+MDAMP,   36,    0.050000
+MDAMP,   37,    0.050000
+MDAMP,   38,    0.050000
+MDAMP,   39,    0.050000
+MDAMP,   40,    0.050000
+MDAMP,   41,    0.050000
+MDAMP,   42,    0.050000
+MDAMP,   43,    0.050000
+MDAMP,   44,    0.050000
+MDAMP,   45,    0.050000
 save
-solve

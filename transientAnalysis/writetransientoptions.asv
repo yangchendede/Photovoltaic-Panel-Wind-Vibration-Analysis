@@ -2,6 +2,7 @@ text = [
 "!*********************!"
 "! transient analysis options"
 "!*********************!"
+"/sol"
 "/SOLU"
 "ALLSEL,ALL "
 "ANTYPE,trans"
@@ -33,9 +34,9 @@ fprintf(fileID, '\n');
 fprintf(fileID, '%s\n', text);
 
 % 模态缩减法才使用
-for modei = 1:modeN
-    fprintf(fileID,"MDAMP,%5d,%12.6f\n", modei, modedampinglist(modei));
-end
+% for modei = 1:modeN
+%     fprintf(fileID,"MDAMP,%5d,%12.6f\n", modei, modedampinglist(modei));
+% end
 
 fprintf(fileID, 'save\n');
 % fprintf(fileID, 'solve\n');
