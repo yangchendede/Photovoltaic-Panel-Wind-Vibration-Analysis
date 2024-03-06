@@ -1,3 +1,5 @@
+
+
 # 风振计算 To Do List
 
 ## 1.Extracting Structural Geometry Information
@@ -174,7 +176,7 @@ end
 
 *software: in apdl script*
 
-### 预应力大变形静力分析：悬索找型
+**预应力大变形静力分析：悬索找型**
 
 ```fortran
 !*************************************!
@@ -220,11 +222,32 @@ FINISH
 
 ![找型result](找型result.png)
 
-* 初始位移、速度、加速度
+***Important Note***
+
+```fortran
+!      write emat file for psolve        
+!*************************************!
+!大变形有预应力静力分析
+/SOLU
+ANTYPE,0
+NLGEOM,ON !打开大变形效应
+PSTRES,ON !打开预应力效应
+EMATWRITE,YES !写出emat文件，pslove求解必用
+NSUBST,50 !设置荷载步
+OUTRES,ALL,ALL !设置结果输出频度
+SOLVE
+FINISH
+```
+
+* **this part will lead to structure unreasonable displacement even under small load**
+
+* **So, only implement this part before analysis modal, which require psolve**
+* ***DO NOT* implement this part before apply load, eg. transient, static analysis etc.**
 
 ## 5检查模型是否约束
 
-
+* 模态分析
+* 静力分析
 
 ## 6. Applying Loads and Obtaining the Solution
 
@@ -589,7 +612,11 @@ The nested `*DO` loops iterate over each time step (`I`) and each node (`II`). W
 
 ### Solution
 
-**can't get resonable result. Looking for the reason.**
+### Important Error
+
+#### 1. Unresonable Displacement under Small Load
+
+![模型不合理变形1](模型不合理变形1.png)
 
 * 模态分析正常
 
@@ -640,6 +667,28 @@ The nested `*DO` loops iterate over each time step (`I`) and each node (`II`). W
 
   ![模型不合理变形2](模型不合理变形2.png)
 
+  ***REASON***
+
+  ```fortran
+  !      write emat file for psolve        
+  !*************************************!
+  !大变形有预应力静力分析
+  /SOLU
+  ANTYPE,0
+  NLGEOM,ON !打开大变形效应
+  PSTRES,ON !打开预应力效应
+  EMATWRITE,YES !写出emat文件，pslove求解必用
+  NSUBST,50 !设置荷载步
+  OUTRES,ALL,ALL !设置结果输出频度
+  SOLVE
+  FINISH
+  ```
+
+  * **this part will lead to structure unreasonable displacement even under small load**
+
+  * **So, only implement this part before analysis modal, which require psolve**
+  * ***DO NOT* implement this part before apply load, eg. transient, static analysis etc.**
+
 ## 7Post Processing
 
 ### read and show result
@@ -658,6 +707,8 @@ two ways: plot and list
 
 ![showresult](showresult.png)
 
+
+
 ### More information
 
 * how to show some node or element result?
@@ -667,3 +718,13 @@ two ways: plot and list
 *check the ANSYS Helper*
 
 ![helper_post1](helper_post1.png)
+
+## 8 Result
+
+### time history displacement
+
+#### Demo
+
+mid-span and quarter-span normal displacementand
+
+![timedisplacementdemo](timedisplacementdemo.png)

@@ -38,6 +38,8 @@
 
   store the document
 
+  helper.md is useful.
+
 * **post_process**
 
 * **preAnalysis**
