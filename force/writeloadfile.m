@@ -17,7 +17,7 @@ loadN = numel(pressureNlist);
 %% load pressure
 
 %% calculte pressure should be applied
-pressure = rand(loadN, timeNum)*1000;
+pressure = rand(loadN, timeNum)*10;
 
 %% load 336 net pressure to 336 element surface
 
@@ -60,7 +60,7 @@ timeNum = 20
         for pressurei = 8:8
             % SFE, Elem, LKEY, Lab, KVAL, VAL1, VAL2, VAL3, VAL4
 %             fprintf(fileID,'SFE,%5d,%5d,PRES,1,%12.6f\n',loadElementlist(pressurei), 1,pressure(pressurei,tt));
-            fprintf(fileID,'F,%d,FZ,%12.6f\n',105,pressure(pressurei,tt));
+            fprintf(fileID,'F,%d,FZ,%12.6f\n',121,pressure(pressurei,tt));
         end
         fprintf(fileID,'SOLVE\n');
 %             fprintf(fileID,'LSWRITE\n');

@@ -222,7 +222,11 @@ FINISH
 
 * 初始位移、速度、加速度
 
-## 5. Applying Loads and Obtaining the Solution
+## 5检查模型是否约束
+
+
+
+## 6. Applying Loads and Obtaining the Solution
 
 ### Establish Constraint
 
@@ -583,9 +587,60 @@ The nested `*DO` loops iterate over each time step (`I`) and each node (`II`). W
 - Applies a force in the Z direction (`FZ`) to each node (`II+100`) using the wind load data from the `W150` array.
 - Solves the analysis for each time step with `PSOLVE`.
 
+### Solution
 
+**can't get resonable result. Looking for the reason.**
 
-## 6Post Processing
+* 模态分析正常
+
+* 静力分析正常
+
+  * 前面找型时已经得到了正确的结果
+
+  * 在找型的基础上，在第一跨跨中又加300N荷载，依然可以正确计算位移
+
+    ![模型约束测试1](模型约束测试1.png)
+
+* 存在一个问题：write emat之后不能正常进行静力分析
+
+  静力分析，找型代码如下
+
+  ```
+  !*************************************!
+  !               找型        
+  !*************************************!
+  *do,i,1,50
+  /solu
+  ALLSEL                   !选择全部
+  !施加重力;考虑大变形效应;设置载荷步时间;采用自动时间步长;指定载荷步为非阶跃方式;在非线性分析中，激活应力刚度效应
+  solve                                                                                                
+  finish  
+  UPCOORD,1,ON
+  *enddo
+  !*************************************!
+  !      write emat file for psolve        
+  !*************************************!
+  !大变形有预应力静力分析
+  /SOLU
+  ANTYPE,0
+  NLGEOM,ON !打开大变形效应
+  PSTRES,ON !打开预应力效应
+  EMATWRITE,YES !写出emat文件，pslove求解必用
+  NSUBST,50 !设置荷载步
+  OUTRES,ALL,ALL !设置结果输出频度
+  SOLVE
+  FINISH
+  ```
+
+  如果我在write emat file之后重新进行静力分析，比如重新找型，则模型产生不合理变形
+
+  ![模型不合理变形1](模型不合理变形1.png)
+
+  与不合理变形伴随的还有无限多的substep
+
+  ![模型不合理变形2](模型不合理变形2.png)
+
+## 7Post Processing
 
 ### read and show result
 

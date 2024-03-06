@@ -1,0 +1,18 @@
+
+!*********************!
+! transient analysis options
+!*********************!
+/SOLU
+ALLSEL                   !选择全部
+ACEL,,,9.8,               !施加重力
+ANTYPE,0
+NLGEOM,ON
+PSTRES,ON 
+SSTIF,ON
+NSUBST,1
+OUTRES,ALL,ALL  
+      
+                 
+ 
+  
+

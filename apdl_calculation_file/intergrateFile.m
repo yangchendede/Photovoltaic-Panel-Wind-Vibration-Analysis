@@ -8,7 +8,7 @@ fidfina = fopen('intergratedFile.txt', 'w');
 
 filelist = ["../model/setup.txt", "../model/defineElementTypeConstantMaterial.txt", ...
             "../model/geometry.txt", "../force/constraint.txt", ...
-            ];
+            "../preAnalysis/zhaoxingNoemat.txt"];
 
 % Read and write file content
 for fileN = 1: numel(filelist)
