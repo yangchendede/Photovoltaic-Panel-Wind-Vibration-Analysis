@@ -174,7 +174,7 @@ end
 
 *software: in apdl script*
 
-* 预应力大变形静力分析：悬索找型
+### 预应力大变形静力分析：悬索找型
 
 ```fortran
 !*************************************!
@@ -482,6 +482,18 @@ Pressures
 	face 3 (J-I), face 4 (K-J), face 5 (L-K), face 6 (I-L)
 
 ![shell181define](shell181define.png)
+
+```fortran
+!example
+*DO,i,1,numTimeSteps,1
+    ! Apply the load for the current time step
+    SFE,elementNumber,SURF,PRES,PressureValues(i)
+    TIME,PressureTime(i)  ! Advance to the time of the load step
+    SOLVE  ! Solve for the current time step
+*ENDDO
+```
+
+
 
 #### Use APDL Loop
 

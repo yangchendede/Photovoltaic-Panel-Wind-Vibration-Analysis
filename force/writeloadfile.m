@@ -1,4 +1,11 @@
 clear;
+%% define time step and some parameter
+freq = 312.5;
+time = 90;
+N = freq * time;
+geometricScale = 7;
+windspeedScale = 30/10;
+
 %% load pressure
 
 %% calculte pressure should be applied

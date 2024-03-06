@@ -6,8 +6,8 @@
 ANTYPE,MODAL
 UPCOORD,1,ON
 PSTRES,ON
-MODOPT,LANB,60
-MXPAND,60
+MODOPT,LANB,80 !可以修改，定义需要计算多少阶模态
+MXPAND,80      !可以修改，定义需要计算多少阶模态
 PSOLVE,EIGLANB
 FINISH
 /SOLU !modal extension
