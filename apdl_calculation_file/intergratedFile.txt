@@ -1389,8 +1389,8 @@ FINISH
 ANTYPE,MODAL
 UPCOORD,1,ON
 PSTRES,ON
-MODOPT,LANB,80 !可以修改，定义需要计算多少阶模态
-MXPAND,80      !可以修改，定义需要计算多少阶模态
+MODOPT,LANB,45 !可以修改，定义需要计算多少阶模态
+MXPAND,45      !可以修改，定义需要计算多少阶模态
 PSOLVE,EIGLANB
 FINISH
 /SOLU !modal extension

@@ -234,23 +234,30 @@ select node set. establish constraint
 
 *software: apdl script*
 
-#### Transient Analysis
+#### Transient Analysis (Mode-Superposition Method)
 
 ```fortran
-!*******************瞬态分析*********************
-/SOL
+!*********************!
+! transient analysis options
+!*********************!
+/sol
 /SOLU
-ANTYPE,TRANS
-TRNOPT,MSUP,50,,,,,YES
+ALLSEL,ALL 
+ANTYPE,trans
+TRNOPT,MSUP,45,,,,,YES
 ACEL,,,9.800
-FCUM,ADD,,
-MDAMP,1,0.02
-MDAMP,2,0.02
-...
-MDAMP,50,0.02
+!NLGEOM,ON
 AUTOTS, ON
-SAVE
-SOLVE	
+PSTRES,ON ！打开预应力效应
+SSTIF,ON !打开应力钢化效应
+NSUBST,1
+OUTRES,ALL,ALL
+MDAMP,    1,    0.050000
+MDAMP,    2,    0.050000
+...
+MDAMP,    45,   0.050000	
+save
+solve
 ```
 
 * **ANTYPE,TRANS**
@@ -305,28 +312,47 @@ SOLVE
 
   Defines the damping ratios as a function of mode.
 
+* **NLGEOM,ON**
+
+  Activates large deflection effects, which is important for accurate nonlinear dynamic analysis.
+
+* **PSTRES,ON** and **SSTIF,ON**: 
+
+  These commands activate prestress effects and include stress-stiffening in the analysis, respectively.
+
 * **AUTOTS, ON**
 
   Specifies whether to use automatic time stepping or load stepping.
 
-#### Static Analysis
+#### Transient Analysis (完全法，有大变形只能用完全法)
 
 ```fortran
-/SOLU$ALLSEL,ALL 
+!*********************!
+! transient analysis options
+!*********************!
+/sol
+/SOLU
+ALLSEL,ALL 
 ANTYPE,trans
-NLGEOM,ON
-PSTRES,ON 
-SSTIF,ON
+TRNOPT,FULL
+ACEL,,,-9.800
+NLGEOM,ON ! 大变形效应只有在瞬态分析完全法中才能使用
+AUTOTS, ON
+PSTRES,ON !打开预应力效应
+SSTIF,ON !打开应力钢化效应
 NSUBST,1
-OUTREA,ALL,ALL  
+OUTRES,ALL,ALL
+save
+solve 
 ```
 
 - `/SOLU`: Enters the solution environment. The `$ALLSEL,ALL` part seems to be a combination of commands and might be incorrectly formatted. The correct command to select all entities is `ALLSEL,ALL` or simply `ALLSEL` for APDL.
-- `ANTYPE,0`: Specifies a static analysis.
+- `ANTYPE,trans`: Specifies a transient analysis.
+- `TRNOPT,FULL`: full method transient analysis
 - `NLGEOM,ON`: Activates large deflection effects, which is important for accurate nonlinear dynamic analysis.
 - `PSTRES,ON` and `SSTIF,ON`: These commands activate prestress effects and include stress-stiffening in the analysis, respectively.
 - `NSUBST,1`: Sets the number of substeps. This might need adjustment based on the analysis requirements.
-- `OUTREA,ALL,ALL`: Specifies that all results should be output for all substeps.
+- `OUTRES,ALL,ALL`: Specifies that all results should be output for all substeps.
 
 #### Modal Analysis with PreStress
 
@@ -470,9 +496,11 @@ Etc.
 
   stored in `pressurenumbermapping.mat`
 
-* define time steps
+* define time steps, write each time step's force to apdl script
 
-* write each time step's force to apdl script
+  use `writeloadfile.m` to write `loadhistory.txt`
+
+  
 
 ##### apply surface load on shell181 element
 
@@ -502,14 +530,7 @@ NN=10000 !单点数据长度
 *DIM,W150,,63,NN !创建节点风荷载存储文件,default type is ARRAY, dimension 63*n[*1]
 *VREAD,WF,WF150.TXT,,JIK,NN,63 !先读入行，后读入列
 (10000F1.8)!读入格式，每行10000个数据，1个字节，数点后8位
-
-/SOLU$ALLSEL,ALL 
-ANTYPE,0
-NLGEOM,ON
-PSTRES,ON 
-SSTIF,ON
-NSUBST,1
-OUTREA,ALL,ALL  
+ 
 
 *DO,I,1,NN
  TIME,I

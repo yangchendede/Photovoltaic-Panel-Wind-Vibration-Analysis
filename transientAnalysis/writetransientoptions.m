@@ -1,0 +1,45 @@
+text = [
+"!*********************!"
+"! transient analysis options"
+"!*********************!"
+"/sol"
+"/SOLU"
+"ALLSEL,ALL "
+"ANTYPE,trans"
+"!TRNOPT,MSUP,45,,,,,YES"
+"TRNOPT,FULL"
+"ACEL,,,-9.800"
+"NLGEOM,ON ! 大变形效应只有在瞬态分析完全法中才能使用"
+"AUTOTS, ON"
+"PSTRES,ON ！打开预应力效应"
+"SSTIF,ON !打开应力钢化效应"
+"NSUBST,1"
+"OUTRES,ALL,ALL"
+];
+modeN = 45;
+modedampinglist = 0.05*ones(1,modeN);
+
+% 打开文件准备写入，'w'表示写入模式，如果文件已存在会被覆盖
+inputPath = strcat(['']);
+filename = 'transientAnalysisOptions.txt';
+fileName = strcat(inputPath,'',filename);
+fileID = fopen(fileName, 'w');
+% 检查文件是否成功打开（fileID是否大于3）
+if fileID == -1
+    error('File cannot be opened');
+end
+
+% write
+fprintf(fileID, '\n');
+fprintf(fileID, '%s\n', text);
+
+% 模态缩减法才使用
+% for modei = 1:modeN
+%     fprintf(fileID,"MDAMP,%5d,%12.6f\n", modei, modedampinglist(modei));
+% end
+
+fprintf(fileID, 'save\n');
+fprintf(fileID, 'solve\n');
+
+% close the file
+fclose(fileID);

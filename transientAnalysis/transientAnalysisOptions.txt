@@ -1,0 +1,19 @@
+
+!*********************!
+! transient analysis options
+!*********************!
+/sol
+/SOLU
+ALLSEL,ALL 
+ANTYPE,trans
+!TRNOPT,MSUP,45,,,,,YES
+TRNOPT,FULL
+ACEL,,,-9.800
+NLGEOM,ON ! 大变形效应只有在瞬态分析完全法中才能使用
+AUTOTS, ON
+PSTRES,ON ！打开预应力效应
+SSTIF,ON !打开应力钢化效应
+NSUBST,1
+OUTRES,ALL,ALL
+save
+solve

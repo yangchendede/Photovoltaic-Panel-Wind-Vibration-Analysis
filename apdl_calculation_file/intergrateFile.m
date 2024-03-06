@@ -13,6 +13,5 @@ for fileN = 1: numel(filelist)
     fwrite(fidfina, content);
 end
 
-
 % Close all file identifiers
 fclose('all');
