@@ -1368,3 +1368,124 @@ finish
 /SOLU
 UPCOORD,1,ON
 *enddo
+!*********************!
+! transient analysis options
+!*********************!
+/SOLU
+ALLSEL                   !选择全部
+ACEL,,,9.8,               !施加重力
+ANTYPE,0
+NLGEOM,ON
+PSTRES,ON 
+SSTIF,ON
+NSUBST,1
+OUTRES,ALL,ALL  
+      
+                 
+ 
+  
+
+
+!*********************!
+! define time-step load
+!*********************!
+TIME,    1
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    6.883068
+SOLVE
+TIME,    2
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    2.826287
+SOLVE
+TIME,    3
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    2.700677
+SOLVE
+TIME,    4
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    2.896872
+SOLVE
+TIME,    5
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    7.136729
+SOLVE
+TIME,    6
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    3.118551
+SOLVE
+TIME,    7
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    4.920925
+SOLVE
+TIME,    8
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    2.902384
+SOLVE
+TIME,    9
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    4.545766
+SOLVE
+TIME,   10
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    9.498994
+SOLVE
+TIME,   11
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    6.591581
+SOLVE
+TIME,   12
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    0.655216
+SOLVE
+TIME,   13
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    1.879395
+SOLVE
+TIME,   14
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    1.692664
+SOLVE
+TIME,   15
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    6.092070
+SOLVE
+TIME,   16
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    6.637209
+SOLVE
+TIME,   17
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    2.207454
+SOLVE
+TIME,   18
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    3.365621
+SOLVE
+TIME,   19
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    1.676315
+SOLVE
+TIME,   20
+NSUBST,1,,,1
+KBC,0
+F,121,FZ,    7.596884
+SOLVE
