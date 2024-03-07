@@ -4,6 +4,7 @@
 !*********************!
 /SOLU
 ALLSEL                   !选择全部
+AUTOTS, ON
 ACEL,,,9.8,               !施加重力
 ANTYPE,0
 NLGEOM,ON

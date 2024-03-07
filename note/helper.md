@@ -542,7 +542,7 @@ Pressures
 !example
 *DO,i,1,numTimeSteps,1
     ! Apply the load for the current time step
-    SFE,elementNumber,SURF,PRES,PressureValues(i)
+    SFE, Elem, LKEY, Lab, KVAL, VAL1, VAL2, VAL3, VAL4
     TIME,PressureTime(i)  ! Advance to the time of the load step
     SOLVE  ! Solve for the current time step
 *ENDDO

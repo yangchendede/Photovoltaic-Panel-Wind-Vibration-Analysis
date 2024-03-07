@@ -5,7 +5,6 @@ FINISH
 /cwd, D:\ansysproj
 
 /PREP7   
-
 /COLOR,DEFAULT
 /RGB,INDEX,100,100,100,0
 /RGB,INDEX,80,80,80,13
