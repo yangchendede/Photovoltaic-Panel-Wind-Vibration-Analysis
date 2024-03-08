@@ -21,7 +21,7 @@ dt = 1 / protoFreq;
 
 % apdl计算参数
 timeNum = 2800;
-timeNum = 400;
+timeNum = 20;
 t=dt:dt:(timeNum * dt);
 pressureNlist = 1:336;
 loadNnumber = numel(pressureNlist);
@@ -37,7 +37,7 @@ wr=1/2*rou*ur^2;
 %% load pressure
 inputFileDir = "D:\柔性光伏板_全\风洞试验数据\测点风压系数时程_插值\mat格式";
 conditionNu = 1;
-wangle = 1;
+wangle = 4;
 condition = condition_inclination(conditionNu);
 w = ww(wangle);
 
@@ -50,6 +50,13 @@ pressurecoe = out_order(:,10001:10000+timeNum);
 netpressurecoe = pressurecoe(1:336,:) - pressurecoe(337:end,:);
 pressure = -(netpressurecoe * wr); % 压力为负代表向下压，和重力同向
 % pressure = -(300+rand(loadNnumber, timeNum)*30);
+
+%% adjust pressure point number
+% 因为第三排光伏板荷载成中心对称，但合理的是对称。因此认为第三排光伏板右侧测点顺序错了，第三排光伏板右侧1，2，3，4排顺序改为4，3，2，1排
+% 239:252,267:280,295:308, 321:336
+pointadj = [1:238,321:336,253:266,295:308,281:294,267:280,309:320,239:252];
+pressuretoadj = pressure;
+pressureadj = pressuretoadj(pointadj,:);
 %% load 336 net pressure to 336 element surface
 
 % load pressure data order to apdl element mapping relation
@@ -87,7 +94,7 @@ for wangle = 1:1
         for loadlocation = 1:loadNnumber
 %         for loadlocation = 1:28
             % SFE, Elem, LKEY, Lab, KVAL, VAL1, VAL2, VAL3, VAL4
-            fprintf(fileID,'SFE,%5d,%5d,PRES,1,%12.6f\n',loadElementlist(loadlocation), 1,pressure(loadlocation,tt));
+            fprintf(fileID,'SFE,%5d,%5d,PRES,1,%12.6f\n',loadElementlist(loadlocation), 1,pressureadj(loadlocation,tt));
 %             fprintf(fileID,'F,%5d,   FZ,%12.6f\n',100+loadlocation,pressure(loadlocation,tt));
         end
         fprintf(fileID,'SOLVE\n');
