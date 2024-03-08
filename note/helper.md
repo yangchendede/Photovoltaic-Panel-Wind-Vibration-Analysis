@@ -610,7 +610,9 @@ The nested `*DO` loops iterate over each time step (`I`) and each node (`II`). W
 - Applies a force in the Z direction (`FZ`) to each node (`II+100`) using the wind load data from the `W150` array.
 - Solves the analysis for each time step with `PSOLVE`.
 
-### Solution
+### Prototype Wind Pressure
+
+![calprotopressure](calprotopressure.png)
 
 ### Important Error
 
@@ -707,7 +709,9 @@ two ways: plot and list
 
 ![showresult](showresult.png)
 
+**change deform scale factor**
 
+GUI: general postproc->plot result->contour plot->nodal solution
 
 ### More information
 
