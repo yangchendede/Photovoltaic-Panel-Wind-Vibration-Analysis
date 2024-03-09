@@ -8,18 +8,17 @@ ww = 0:10:180;
 % 场地参数
 aerfa=0.3;%d类地貌，中高层建筑密集区，起伏较大的丘陵地带，地面粗糙度取0.3
 % 风速计算
-wr = 400; % 建筑结构荷载规范规定50年重现期基本风压 N/m2
+wb = 400; % 建筑结构荷载规范规定50年重现期基本风压 N/m2
 protoReferenceHeight = 1.85; %实际结构参考点高度
 elevation=304.5; %建筑结构荷载规范规定
 rou=0.00125*exp(-0.0001*elevation)*1000; %空气密度
-v = sqrt(wr/(0.5*rou)); %10米高度50年重现期10min平均风速
+v = sqrt(wb/(0.5*rou)); %10米高度50年重现期10min平均风速
 ur=v*(protoReferenceHeight/10).^aerfa; %实际结构参考高度风速
-
+wr = 0.5*rou*ur^2;
 
 % 实验参数
 freq = 312.5; %风洞采集频率
-time = 90;
-N = freq * time;
+
 geometricScale = 7; %几何比尺
 windspeedScale = ur/10; %风速比尺
 timeScale = geometricScale / windspeedScale; %时间比尺
@@ -31,10 +30,6 @@ timeNum = 2800;
 t=dt:dt:(timeNum * dt);
 pressureNlist = 1:336;
 loadNnumber = numel(pressureNlist);
-
-
-
-
 
 %% load pressure
 inputFileDir = "D:\柔性光伏板_全\风洞试验数据\测点风压系数时程_插值\mat格式";
