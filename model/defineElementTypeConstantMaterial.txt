@@ -3,7 +3,13 @@
 !   real constant
 !*********************!
 
-R,2,191e-6,50/1.94E5      !导线实常数，截面积，初应变，施加535MPa初应力,找型时施加很小弹性模量
+!area = 191*10-6 m2
+!E = 195 Gpa
+!F = 70KN
+!stress = F/area = 366 Mpa
+!strain = stress/E = 366/195e3
+
+R,2,191e-6,366/195e3      !导线实常数，截面积，初应变，施加535MPa初应力,找型时施加很小弹性模量
 R,3,35e-3               !板厚35mm
 
 !*********************!
@@ -12,9 +18,9 @@ R,3,35e-3               !板厚35mm
 
 PI=3.1415926
 
-ET,1,LINK10      !只受拉,拉索材料          
-ET,3,shell181      !光伏板
-ET,4,mass21
+ET,1,LINK10      !只受拉,拉索材料     element type     
+ET,3,shell181      !光伏板            element type
+
 !Z轴为重力作用轴
 DENSOFTIE=7.85e3       !单位:kg/(m^3),即为立柱Q345密度
 
@@ -22,7 +28,7 @@ DENSOFTIE=7.85e3       !单位:kg/(m^3),即为立柱Q345密度
 DEN_RATIO2=1
 MPTEMP,,,,,,,,  
 MPTEMP,1,0 
-MPDATA,EX,2,,1.95E11           !弹性模量：1.95e11 N/(m^2)，
+MPDATA,EX,2,,195E9           !弹性模量：1.95e11 N/(m^2)，
 MPDATA,PRXY,2,,0.3
 MPDATA,DENS,2,,DEN_RATIO2*DENSOFTIE     !钢索密度7.864e3,单位：kg/(m^3)
 

@@ -693,6 +693,40 @@ The nested `*DO` loops iterate over each time step (`I`) and each node (`II`). W
 
 ## 7Post Processing
 
+### write result into txt file
+
+**basic:** define paremeter (scale or array) to store the result, then use `vwrite` to write into txt file.
+
+**example**
+
+```fortran
+k=5
+esel,s,type,,1   !type=1的单元：杆件单元
+*get,elemnum,elem,,count !得到单元的总数目
+*get,emin,elem,,num,min ! 获得最小单元号
+*dim,elemlist,array,elemnum,8 !单元包含的节点列表，指定每个单元包含6个节点，根据情况修改
+numele=emin
+*do,i,1,elemnum,1
+    elemlist(i,1)=numele
+	*do,ii,7,8,1
+		elemlist(i,ii)=nelem(numele,ii-6)   !获得该单元的两端节点1 2存在第7列、第8列
+	*enddo
+    *get,elemlist(i,2),elem,numele,attr,MAT         !获得材料号存在第2列
+    *get,elemlist(i,3),elem,numele,attr,type         !获得单元号存在第3列
+    *get,elemlist(i,4),elem,numele,attr,REAL         !获得实常数号存在第4列
+    *get,elemlist(i,5),elem,numele,attr,ESYS         !获得坐标号存在第5列
+    *get,elemlist(i,6),elem,numele,attr,SECN         !获得截面号存在第6列
+    numele=elnext(numele)                            !获得下一个单元号
+*enddo
+*CFOPEN,e_member%k%,txt
+!打开文件，写入，关闭
+*VWRITE,elemlist(1,1),elemlist(1,2),elemlist(1,3),elemlist(1,4),elemlist(1,5),elemlist(1,6),elemlist(1,7),elemlist(1,8)
+(8F10.0)
+*CFCLOSE
+```
+
+
+
 ### read and show result
 
 **read results**
@@ -732,3 +766,6 @@ GUI: general postproc->plot result->contour plot->nodal solution
 mid-span and quarter-span normal displacementand
 
 ![timedisplacementdemo](timedisplacementdemo.png)
+
+### 风振计算需要的变量
+

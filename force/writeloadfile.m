@@ -33,7 +33,7 @@ loadNnumber = numel(pressureNlist);
 
 %% load pressure
 inputFileDir = "D:\柔性光伏板_全\风洞试验数据\测点风压系数时程_插值\mat格式";
-conditionNu = 1;
+conditionNu = 6;
 wangle = 4;
 condition = condition_inclination(conditionNu);
 w = ww(wangle);

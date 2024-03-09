@@ -1,8 +1,8 @@
 FINISH                                                    
 /CLEAR
-/filename,PVmodel_finish_modalAnalysis,on
+/filename,PVmodel_30inclination_30windangle,on
 /title,PVmodel
-/cwd, D:\ansysproj
+/cwd, D:\ansysproj\PV_modal_proj\30inclination
 
 /PREP7   
 /COLOR,DEFAULT
