@@ -687,42 +687,98 @@ The nested `*DO` loops iterate over each time step (`I`) and each node (`II`). W
   ```
 
   * **this part will lead to structure unreasonable displacement even under small load**
-
   * **So, only implement this part before analysis modal, which require psolve**
   * ***DO NOT* implement this part before apply load, eg. transient, static analysis etc.**
+
+#### 2. Number of variable allowed in post26 is 200
+
+```fortran
+*do,NVAR,1,201,1
+NSOL,NVAR,nnode,U,Z, uz_%nnode% !NSOL,2,101,U,Z, UZ_2
+*enddo
+```
+
+在post26中nsol定义variable最多只能有200个，因此这个循环定义了201个变量是不允许的。
+
+![variablenumberallowedinpost26](D:\柔性光伏板_全\Photovoltaic-Panel-Wind-Vibration-Analysis\note\variablenumberallowedinpost26.png)
+
+**solve**
+
+post26取出variable赋给parameter后，立即删除variable，释放空间，然后再取下一个点的时程，再赋给parameter
+
+```fortran
+!一个表只能存一种结果，以z位移为例，纵轴是时间步，横轴是点
+
+
+inclination=30
+wangle = 30
+nnum = 1
+timestep = 10
+nnode=200
+/post26
+!*CFOPEN,UZ_%inclination%_%wangle%,txt
+*do, i, 1,nnum,1
+NSOL,3,nnode,U,Z, uz_%nnode% !NSOL,2,101,U,Z, UZ_2
+*DIM,uz_%nnode%,ARRAY,timestep,1  
+VGET,uz_%nnode%,3
+!*VWRITE,uz_%nnode%(1,1)
+!(F10.5)
+*del,UZ_%nnode% !nein
+VARDEL, 3 !worked
+nnode=ndnext(nnode)  !获取下一个节点编号
+*enddo
+!*CFCLOSE
+```
+
+
 
 ## 7Post Processing
 
 ### write result into txt file
 
-**basic:** define paremeter (scale or array) to store the result, then use `vwrite` to write into txt file.
+**basic:** 
+
+1. 从post26将node或element的时程结果取出，用`NSOL`得到时程结果。
+
+2. 用`vget`把post26取出的结果赋给parameter
+
+3. 用`vwrite`写parameter。
+
+***notice***
+
+* `nsol`取出的结果无法直接写出，必须再赋给一个变量
+
+* `nsol`取出结果的数量有限制：
+
+  `NUMVAR, NV`: Specifies the number of variables allowed in POST26.
+
+  `NV`: Allow storage for NV variables. 200 maximum are allowed. Defaults to 10. TIME (variable 1) should also be included in this number.
 
 **example**
 
 ```fortran
-k=5
-esel,s,type,,1   !type=1的单元：杆件单元
-*get,elemnum,elem,,count !得到单元的总数目
-*get,emin,elem,,num,min ! 获得最小单元号
-*dim,elemlist,array,elemnum,8 !单元包含的节点列表，指定每个单元包含6个节点，根据情况修改
-numele=emin
-*do,i,1,elemnum,1
-    elemlist(i,1)=numele
-	*do,ii,7,8,1
-		elemlist(i,ii)=nelem(numele,ii-6)   !获得该单元的两端节点1 2存在第7列、第8列
-	*enddo
-    *get,elemlist(i,2),elem,numele,attr,MAT         !获得材料号存在第2列
-    *get,elemlist(i,3),elem,numele,attr,type         !获得单元号存在第3列
-    *get,elemlist(i,4),elem,numele,attr,REAL         !获得实常数号存在第4列
-    *get,elemlist(i,5),elem,numele,attr,ESYS         !获得坐标号存在第5列
-    *get,elemlist(i,6),elem,numele,attr,SECN         !获得截面号存在第6列
-    numele=elnext(numele)                            !获得下一个单元号
+!一个表只能存一种结果，以z位移为例，纵轴是时间步，横轴是点
+
+inclination=30
+wangle = 30
+nnum = 630
+timestep = 10
+nnode=101
+/post26
+!*CFOPEN,UZ_%inclination%_%wangle%,txt
+*do, i, 1,nnum,1
+NSOL,3,nnode,U,Z, uz_%nnode% !NSOL,3,101,U,Z, UZ_2
+*DIM,uz_%nnode%,ARRAY,timestep,1  
+VGET,uz_%nnode%,3
+!*VWRITE,uz_%nnode%(1,1)
+!(F10.5)
+*del,UZ_%nnode% !nein
+VARDEL, 3 !worked nsol最多只能有200个variable，因此vget拿到结果后立即删除nsol的结果，释放空间
+nnode=ndnext(nnode)  !获取下一个节点编号
 *enddo
-*CFOPEN,e_member%k%,txt
-!打开文件，写入，关闭
-*VWRITE,elemlist(1,1),elemlist(1,2),elemlist(1,3),elemlist(1,4),elemlist(1,5),elemlist(1,6),elemlist(1,7),elemlist(1,8)
-(8F10.0)
-*CFCLOSE
+!*CFCLOSE
+
+
 ```
 
 

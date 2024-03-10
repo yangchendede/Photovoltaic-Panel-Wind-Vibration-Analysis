@@ -25,8 +25,8 @@ timeScale = geometricScale / windspeedScale; %时间比尺
 protoFreq = freq / timeScale; %原型频率
 dt = 1 / protoFreq;
 
-% apdl计算参数
-timeNum = 2800;
+% apdl计算参数2800
+timeNum = 10;
 t=dt:dt:(timeNum * dt);
 pressureNlist = 1:336;
 loadNnumber = numel(pressureNlist);
