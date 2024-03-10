@@ -26,13 +26,14 @@ protoFreq = freq / timeScale; %原型频率
 dt = 1 / protoFreq;
 
 % apdl计算参数2800
-timeNum = 10;
+timeNum = 2800;
 t=dt:dt:(timeNum * dt);
 pressureNlist = 1:336;
 loadNnumber = numel(pressureNlist);
 
 %% load pressure
-inputFileDir = "D:\柔性光伏板_全\风洞试验数据\测点风压系数时程_插值\mat格式";
+inputFileDir = "H:\柔性光伏板\风洞实验数据\测点风压系数时程_插值\mat格式";
+% 工况
 conditionNu = 6;
 wangle = 4;
 condition = condition_inclination(conditionNu);
@@ -40,7 +41,7 @@ w = ww(wangle);
 
 inputFileName = strcat(inputFileDir,"/",condition,"/","pointPressureCoe_modified2_插值_",num2str(w),".mat");
 load(inputFileName);
-% load('D:\柔性光伏板_全\风洞试验数据\测点风压系数时程_插值\mat格式\5度\pointPressureCoe_modified2_插值_0.mat')
+% load('H:\柔性光伏板\风洞试验数据\测点风压系数时程_插值\mat格式\5度\pointPressureCoe_modified2_插值_0.mat')
 %% calculte pressure should be applied
 % 压力为负代表向下压，和重力同向
 pressurecoe = out_order(:,10001:10000+timeNum);

@@ -11,11 +11,11 @@ nnum = 630;
 timestep = 10;
 nnodestart=101;
 NVAR = 3;
-outputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(inclination),"inclination/");
+outputdir = strcat("D:\Photovoltaic_system\apdl_fengzhen_result\",num2str(inclination),"\");
 %% open the file
 % 打开文件准备写入，'w'表示写入模式，如果文件已存在会被覆盖
 inputPath = strcat('');
-filename = 'getresultfromapdl.txt';
+filename = 'getresultfromapdl4.txt';
 fileName = strcat(inputPath,'',filename);
 fileID = fopen(fileName, 'w');
 % 检查文件是否成功打开（fileID是否大于3）
@@ -26,9 +26,8 @@ fprintf(fileID, "\n!*********************!\n");
 fprintf(fileID, "! get time history result\n");
 fprintf(fileID, "!*********************!\n");
 fprintf(fileID, "/post26\n");
-outputfilename =  strcat("*CFOPEN,",outputdir,"UZ_",num2str(wangle),",txt");
-fprintf(fileID,outputfilename);
-fprintf(fileID,"\n");
+outputfilename =  strcat("UZ_",num2str(inclination),"inclination_"_,num2%dangle
+fprintf(fileID,"*CFOPEN,UZ_%dinclination_%dangle,txt\n",inclination,wangle);
 fprintf(fileID,"nnode=%d\n",nnodestart);
 fprintf(fileID,"*do, i, 1, %d, 1\n",nnum);
 fprintf(fileID,"NSOL,%2d,nnode,U,Z, uz_variable\n",NVAR);

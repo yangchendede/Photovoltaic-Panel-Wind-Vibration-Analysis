@@ -3,8 +3,7 @@
 ! get time history result
 !*********************!
 /post26
-*CFOPEN,D:/Photovoltaic_system/apdl_fengzhen_result/30inclination/UZ_30,txt
-nnode=101
+*CFOPEN,D:nnode=101
 *do, i, 1, 630, 1
 NSOL, 3,nnode,U,Z, uz_variable
 *DIM,uz_parameter,ARRAY,   10,1
