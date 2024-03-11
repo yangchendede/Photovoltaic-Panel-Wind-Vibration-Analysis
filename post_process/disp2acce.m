@@ -14,8 +14,8 @@ wangle = 30;
 nnum = 630;
 timestep = 2800;
 output_timestep = 2800-2;
-inputparameter = ["UZ"];
-
+inputparameter = ["UX","UY","UZ"];
+outputparameter = ["X", "Y", "Z"];
 
 inputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(inclination),"inclination/");
 outputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(inclination),"inclination/");
@@ -39,11 +39,12 @@ for i = 1:numel(inputparameter)
     newFileName = strcat(outputdir,"matrix_",para,"_",num2str(wangle),".csv");
     writematrix(disp_matrix,newFileName);
 
-    newFileName2 = strcat(outputdir,"matrix_","veloZ_",num2str(wangle),".csv");
+    newFileName2 = strcat(outputdir,"matrix_","velo",outputparameter(i),"_", num2str(wangle),".csv");
     velo_matrix = arrayfun(@(x) sprintf('%.5f', x), velo_matrix, 'UniformOutput', false);
     writecell(velo_matrix,newFileName2);
 
-    newFileName3 = strcat(outputdir,"matrix_","acceZ_",num2str(wangle),".csv");
+    newFileName3 = strcat(outputdir,"matrix_","acce",outputparameter(i),"_", num2str(wangle),".csv");
     acce_matrix = arrayfun(@(x) sprintf('%.5f', x), acce_matrix, 'UniformOutput', false);
     writecell(acce_matrix,newFileName3);
+    
 end

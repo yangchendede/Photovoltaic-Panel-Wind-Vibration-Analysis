@@ -6,14 +6,14 @@ condition_inclination = ["5度","10度","15度","20度","25度","30度","15度�
 ww = 0:10:180;
 
 inclination=30;
-wangle = 30;
+wangle = ww(4);
 nnum = 630;
 timestep = 2800;
 nnodestart=101;
 NVAR = 3;
 outputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(inclination),"inclination/");
 
-outputparameter = ["UZ"];
+outputparameter = ["UX","UY","UZ"];
 %% open the file
 % 打开文件准备写入，'w'表示写入模式，如果文件已存在会被覆盖
 inputPath = strcat('');
