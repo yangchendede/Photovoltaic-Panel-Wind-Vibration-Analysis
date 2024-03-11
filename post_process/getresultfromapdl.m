@@ -8,10 +8,12 @@ ww = 0:10:180;
 inclination=30;
 wangle = 30;
 nnum = 630;
-timestep = 10;
+timestep = 2800;
 nnodestart=101;
 NVAR = 3;
 outputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(inclination),"inclination/");
+
+outputparameter = ["UZ"];
 %% open the file
 % 打开文件准备写入，'w'表示写入模式，如果文件已存在会被覆盖
 inputPath = strcat('');
@@ -26,21 +28,32 @@ fprintf(fileID, "\n!*********************!\n");
 fprintf(fileID, "! get time history result\n");
 fprintf(fileID, "!*********************!\n");
 fprintf(fileID, "/post26\n");
-outputfilename =  strcat("*CFOPEN,",outputdir,"UZ_",num2str(wangle),",txt");
-fprintf(fileID,outputfilename);
-fprintf(fileID,"\n");
-fprintf(fileID,"nnode=%d\n",nnodestart);
-fprintf(fileID,"*do, i, 1, %d, 1\n",nnum);
-fprintf(fileID,"NSOL,%2d,nnode,U,Z, uz_variable\n",NVAR);
-fprintf(fileID,"*DIM,uz_parameter,ARRAY,%5d,1\n",timestep);
-fprintf(fileID,"VGET,uz_parameter,%2d\n", NVAR);
-fprintf(fileID,"*VWRITE,uz_parameter(1,1)\n");
-fprintf(fileID,"(F10.5)\n");
-fprintf(fileID,"*del,uz_parameter\n");
-fprintf(fileID,"VARDEL,%2d\n",NVAR);
-fprintf(fileID,"nnode=ndnext(nnode)\n"); % 获取下一个节点编号
-fprintf(fileID,"*enddo\n");
-fprintf(fileID,"*CFCLOSE\n");
-
+for i = 1:numel(outputparameter)
+    fprintf(fileID, "\n!*********************!\n");
+    para = outputparameter(i);
+    outputfilename =  strcat("*CFOPEN,",outputdir,para,"_",num2str(wangle),",txt");
+    fprintf(fileID,outputfilename);
+    fprintf(fileID,"\n");
+    fprintf(fileID,"nnode=%d\n",nnodestart);
+    fprintf(fileID,"*do, i, 1, %d, 1\n",nnum);
+    switch para
+        case "UZ"
+            fprintf(fileID,"NSOL,%2d,nnode,U,Z, variable\n",NVAR);
+        case "UY"
+            fprintf(fileID,"NSOL,%2d,nnode,U,Y, variable\n",NVAR);
+        case "UX"
+            fprintf(fileID,"NSOL,%2d,nnode,U,X, variable\n",NVAR);
+    end
+    fprintf(fileID,"*DIM,parameter,ARRAY,%5d,1\n",timestep);
+    fprintf(fileID,"VGET,parameter,%2d\n", NVAR);
+    fprintf(fileID,"*VWRITE,parameter(1,1)\n");
+    fprintf(fileID,"(F10.5)\n");
+    fprintf(fileID,"*del,parameter\n");
+    fprintf(fileID,"VARDEL,%2d\n",NVAR);
+    fprintf(fileID,"nnode=ndnext(nnode)\n"); % 获取下一个节点编号
+    fprintf(fileID,"*enddo\n");
+    fprintf(fileID, "*CFCLOSE\n");
+end
+fprintf(fileID, "finish\n");
 %% close the file
 fclose(fileID);
