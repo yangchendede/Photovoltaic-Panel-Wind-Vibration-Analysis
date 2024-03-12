@@ -11,7 +11,7 @@ timestep = 2800;
 nnodestart=101;
 NVAR = 3;
 
-conditionNu = 1;
+conditionNu = 6;
 condition = condition_inclinationEn(conditionNu);
 
 outputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(condition),"inclination/");

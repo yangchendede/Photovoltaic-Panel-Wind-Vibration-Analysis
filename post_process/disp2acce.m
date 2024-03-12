@@ -10,7 +10,7 @@ timeNum = 2800;
 % 假设你的数据文件名为 'data.txt'
 % n 和 m 分别是目标矩阵的行数和列数
 inclinationlist =5:5:30;
-inclination = inclinationlist(4);
+inclination = inclinationlist(1);
 ww = 0:10:180;
 nnum = 630;
 timestep = 2800;
@@ -18,7 +18,8 @@ output_timestep = 2800-2;
 inputparameter = ["UX","UY","UZ"];
 outputparameter = ["X", "Y", "Z"];
 
-for w = ww
+parfor wangle = 1:numel(ww)
+    w = ww(wangle);
     inputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(inclination),"inclination/");
     outputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(inclination),"inclination/");
     for i = 1:numel(inputparameter)

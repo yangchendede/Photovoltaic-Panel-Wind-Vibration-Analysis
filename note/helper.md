@@ -825,3 +825,38 @@ mid-span and quarter-span normal displacementand
 
 ### 风振计算需要的变量
 
+
+
+
+
+## 9Matlab Parallel Computing ToolBox
+
+> Parallel Computing Toolbox™ lets you solve computationally and data-intensive problems using multicore processors, GPUs, and computer clusters. High-level constructs—parallel for-loops, special array types, and parallelized numerical algorithms—enable you to parallelize MATLAB® applications without CUDA or MPI programming. The toolbox lets you use parallel-enabled functions in MATLAB and other toolboxes. You can use the toolbox with Simulink® to run multiple simulations of a model in parallel. Programs and models can run in both interactive and batch modes.
+
+**example**
+
+```matlab
+parfor wangle = 1:numel(ww)
+    w = ww(wangle);
+       ...
+    end
+end
+```
+
+if every loops are independent, then you can change `for end` to `parfor end` .
+
+`parfor` means parellel for. 
+
+* you can choose the number of workers in `parallel computing toolbox preference`
+
+* the suitable number of workers depend on jobs' memory occupancy and CPU occupancy.
+
+  if jobs' memory or CPU occupancy exceed PC's capability, then the job will be shutdown.
+
+**For my PC, 4 workers is suitable.**
+
+![image-20240312203046032](parallelmatlab1.jpg)
+
+**too many workers:**
+
+<img src="parallelmatlab2.jpg" alt="image-20240312203046032" style="zoom:50%;" />

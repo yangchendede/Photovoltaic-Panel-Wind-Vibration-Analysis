@@ -11,13 +11,14 @@ ww = 0:10:180;
 paralist = ["U", "velo", "acce"];
 directionlist = ["X_", "Y_", "Z_"];
 % selected condition
-inclination = inclinationlist(4);
+inclination = inclinationlist(1);
 
 % read the data
 inputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(inclination),"inclination/");
 outputdir = strcat(inputdir,"nodestatiCoe/");
 tstart = tic;
-for w = ww
+parfor wangle = 1:numel(ww)
+    w = ww(wangle);
     % disp
     for para = paralist
         for direct = directionlist
