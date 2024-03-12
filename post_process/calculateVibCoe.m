@@ -26,8 +26,8 @@ for para = paralist
         disp_std = readmatrix(inputfilename2);
         
         vibcoe_disp = 1+g.*disp_std./abs(disp_avg);
-        newFileName = strcat(outputdir,"vibCoe",direct,num2str(wangle), ".csv")
+        newFileName = strcat(outputdir,"vibCoe",direct,num2str(wangle), ".csv");
 
-%         writematrix(avgM,newFileName);
+        writematrix(vibcoe_disp,newFileName);
     end
 end

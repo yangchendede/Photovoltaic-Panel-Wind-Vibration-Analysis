@@ -23,7 +23,7 @@ for para = paralist
     for direct = directionlist
         inputfilename = strcat(inputdir,"matrix_",para,direct,num2str(wangle), ".csv");
         M = readmatrix(inputfilename);
-        size(M)
+        M = M(11:end,:); %最前面从0突加荷载，前面10个点不进行统计
         avgM = mean(M,1);
         stdM = std(M,1);
 %         vibcoe_disp3=1+g.*disp_std./abs(disp_avg);

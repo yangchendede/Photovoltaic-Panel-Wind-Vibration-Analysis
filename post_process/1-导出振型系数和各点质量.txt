@@ -1,0 +1,63 @@
+!!此处是为了导出点的模态位移和点质量
+
+alls
+EMAX=ELMIQR(0,14) !去除方向点
+*do,i,1,EMAX
+NODEK=NELEM(I,4)
+NSEL,U,,,NODEK
+NODEK=NELEM(I,3)
+NSEL,U,,,NODEK
+*ENDDO
+cm,ENTN,node      !固定点、求质量点
+
+nsel,s,,,ENTN
+*get,nnum,node,,count ! 获得节点数量
+*get,nodemin,node,,num,min ! 获得最小节点号
+*dim,nodepos,array,nnum,6 ! nodepos存放节点的坐标
+nnode=nodemin
+*do,i,1,nnum,1
+nodepos(i,1)=nnode
+*get,nodepos(i,2),node,nnode,loc,x !获得节点的X坐标
+*get,nodepos(i,3),node,nnode,loc,y
+*get,nodepos(i,4),node,nnode,loc,z
+nnode=ndnext(nnode)
+*enddo
+
+alls
+/SOLU
+ANTYPE,MODAL      !modal分析
+MODOPT,LANB,100         !扩展一百阶模态
+MODOPT,LANB,100,,,2,ON
+MXPAND,100,,,YES
+SOLVE
+FINISH
+
+/post1
+set,1,1        !选振型1是x，2是y
+*DO,I,1,nnum,1
+Nid=nodepos(i,1)
+nodepos(i,5)=UX(Nid)     !振型系数
+*enddo
+
+finish
+/SOLU
+alls
+ddele,all,all
+nsel,s,,,ENTN
+d,all,all
+ACEL,,9.8
+ANTYPE,0      !重力分析
+alls
+SOLVE
+
+/post1
+set,1,1
+*DO,I,1,nnum,1
+Nid=nodepos(i,1)
+*GET,nodepos(i,6),NODE,Nid,RF,FY
+*enddo
+
+*CFOPEN,n_list5x,txt
+*VWRITE,nodepos(1,1),nodepos(1,2),nodepos(1,3),nodepos(1,4),nodepos(1,5),nodepos(1,6)
+(F10.0,5F18.8)
+*CFCLOSE
