@@ -10,7 +10,7 @@ timeNum = 2800;
 % 假设你的数据文件名为 'data.txt'
 % n 和 m 分别是目标矩阵的行数和列数
 inclinationlist =5:5:30;
-inclination = inclinationlist(1);
+inclination = inclinationlist(6);
 ww = 0:10:180;
 nnum = 630;
 timestep = 2800;

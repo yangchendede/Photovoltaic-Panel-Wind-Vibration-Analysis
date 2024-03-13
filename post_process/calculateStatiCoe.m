@@ -11,7 +11,7 @@ ww = 0:10:180;
 paralist = ["U", "velo", "acce"];
 directionlist = ["X_", "Y_", "Z_"];
 % selected condition
-inclination = inclinationlist(1);
+inclination = inclinationlist(6);
 
 % read the data
 inputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(inclination),"inclination/");

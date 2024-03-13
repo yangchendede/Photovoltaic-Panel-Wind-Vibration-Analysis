@@ -8,7 +8,7 @@ ww = 0:10:180;
 directionlist = ["X_", "Y_", "Z_"];
 
 % selected condition
-inclination = inclinationlist(4);
+inclination = inclinationlist(5);
 
 % input output dir
 inputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(inclination),"inclination/", "vibCoe/");

@@ -115,3 +115,45 @@ function checkblockvibCoe(blockvibCoe,w,direct)
     end
     colorbar('Position', [0.92 0.11 0.02 0.815]); % 调整颜色条的位置
 end
+
+function checknodevibCoe(nodevibCoe,w,direct)
+    M = reshape(nodevibCoe,42,15);
+    M = M';
+    M = M(15:-1:1,:);
+
+    % 分割原始矩阵为三个5x42矩阵
+    A1 = M(1:5, :);
+    A2 = M(6:10, :);
+    A3 = M(11:15, :);
+
+    % 定义目标矩阵的x和y坐标网格，对于每个矩阵进行插值
+    [x, y] = meshgrid(panelx_all(1:42), panely_all(1:42:210)); % node坐标
+    [xq, yq] = meshgrid(linspace(panelx_all(1), panelx_all(42), 420), linspace(panely_all(1), panely_all(210), 50)); % 10倍插值后的网格
+        
+    % 对每个矩阵进行插值
+    Aq1 = interp2(x, y, A1, xq, yq, 'cubic');
+    Aq2 = interp2(x, y, A2, xq, yq, 'cubic');
+    Aq3 = interp2(x, y, A3, xq, yq, 'cubic');
+    
+    % 绘制云图
+    figure;
+    subplot(3,1,1);
+    contourf(xq, yq, Aq1, 50);
+    title('Part 3');
+    subplot(3,1,2);
+    contourf(xq, yq, Aq2, 50);
+    title('Part 2');
+    subplot(3,1,3);
+    contourf(xq, yq, Aq3, 50);
+    title('Part 1');
+    title(strcat('vibCoe plot ',direct, num2str(w)));
+
+    % 调整颜色轴以共用同一个颜色轴
+    cmin = min([Aq1(:); Aq2(:); Aq3(:)]);
+    cmax = max([Aq1(:); Aq2(:); Aq3(:)]);
+    for i = 1:3
+        subplot(3,1,i);
+        caxis([cmin cmax]);
+    end
+    colorbar('Position', [0.92 0.11 0.02 0.815]); % 调整颜色条的位置
+end

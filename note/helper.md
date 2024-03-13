@@ -815,7 +815,7 @@ GUI: general postproc->plot result->contour plot->nodal solution
 
 ## 8 Result
 
-### time history displacement
+### Nodes time history displacement
 
 #### Demo
 
@@ -823,11 +823,91 @@ mid-span and quarter-span normal displacementand
 
 ![timedisplacementdemo](timedisplacementdemo.png)
 
-### 风振计算需要的变量
+### Nodes time history Velocity, Acceleration
 
+**Obtained from displacement difference**
 
+```matlab
+ % 注意这里假设原始数据就是一列，所以直接使用 reshape
+ disp_matrix = reshape(data, [timestep, nnum]);
+ % 计算第一次差分（速度）
+ velo_matrix = diff(disp_matrix, 1, 1) / dt; %少一行
+ % 计算第二次差分（加速度）
+ acce_matrix = diff(velo_matrix, 1, 1) / dt; %少一行
+ %认为加速度第一行对应于第二个时间步，最后一行对应倒数第二个时间步，因此对应修改disp_matrix的大小
+ disp_matrix = disp_matrix(2:end-1,:);
+ velo_matrix = velo_matrix(2:end,:);
+```
 
+### Nodes Statistics overtime
 
+* X, Y, Z
+
+* U, V, A
+
+* avg, std
+
+### Nodes Vibration Coefficient and Distribution
+
+**vibration coefficient**
+
+```matlab
+vibcoe_disp = 1+g.*disp_std./abs(disp_avg);
+```
+
+**95% quantile**
+
+```matlab
+quantile(nodevibCoe, 0.95)
+```
+
+如果 **95% quantile**值很大，说明该工况整个风振系数结果不合理。
+
+**不合理原因**
+
+* 极小的平均位移做分母or其他。
+
+**排查**
+
+* 首先检查**average displacement**是否合理
+
+**Example: this project**
+
+* **resonable**
+
+  5inclination, 10inclination, 15inclination, 20inclination
+
+  **5inclination Vibration Coefficient 95% quantile**
+
+  | X_0angle95%value:4.002469  | Y_0angle95%value:4.319623  | Z_0angle95%value:1.378020  |
+  | -------------------------- | -------------------------- | -------------------------- |
+  | X_10angle95%value:3.359438 | Y_10angle95%value:4.000622 | Z_10angle95%value:1.432752 |
+  | X_20angle95%value:3.739464 | Y_20angle95%value:4.755888 | Z_20angle95%value:1.410271 |
+  | X_30angle95%value:3.900119 | Y_30angle95%value:5.918333 | Z_30angle95%value:1.470622 |
+
+  **5inclination0windangle nodes UZ average overtime**
+
+  <img src="5inclination0windangle_nodes_UZ_average_overtime.png" alt="5inclination0windangle_nodes_UZ_average_overtime" style="zoom:50%;" />
+
+* **unresonable**
+
+  25inclination, 30inclination
+
+  **25inclination Vibration Coefficient 95% quantile**
+
+  | X_0angle95%value:12.449447  | Y_0angle95%value:12.339520  | Z_0angle95%value:11.993438     |
+  | --------------------------- | --------------------------- | ------------------------------ |
+  | X_10angle95%value:18.131871 | Y_10angle95%value:10.110410 | Z_10angle95%value:17.435586    |
+  | X_20angle95%value:18.691821 | Y_20angle95%value:7.362312  | Z_20angle95%value:22.660500    |
+  | X_30angle95%value:9.499813  | Y_30angle95%value:22.977271 | **Z_30angle95%value:2.180524** |
+
+  **25inclination0windangle nodes UZ average overtime**
+
+  <img src="25inclination0windangle_nodes_UZ_average_overtime.png" alt="25inclination0windangle_nodes_UZ_average_overtime" style="zoom:50%;" />
+
+**25inclination30windangle nodes UZ average overtime**
+
+![25inclination30windangle_nodes_UZ_average_overtime](25inclination30windangle_nodes_UZ_average_overtime.png)
 
 ## 9Matlab Parallel Computing ToolBox
 

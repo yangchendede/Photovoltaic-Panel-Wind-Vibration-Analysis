@@ -12,7 +12,7 @@ paralist = ["U", "velo", "acce"];
 directionlist = ["X_", "Y_", "Z_"];
 
 % selected condition
-inclination = inclinationlist(1);
+inclination = inclinationlist(6);
 
 paralist = ["U"]; %位移风振系数只需要位移
 
