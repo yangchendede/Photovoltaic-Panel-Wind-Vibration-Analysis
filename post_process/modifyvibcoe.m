@@ -23,6 +23,11 @@ for i = 1:13
 end
 basicrect5 = [basicrect4, basicrect4+210,basicrect4+210*2] - 100;
 
+%meshgrid 用的node的xy坐标
+load("../model/panelnodeall.mat");
+node_x = panelx_all(1:42);
+node_y = panely_all(1:42:210);
+
 % input output dir
 inputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(inclination),"inclination/", "vibCoe/");
 outputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(inclination),"inclination/", "vibCoe/");
@@ -36,9 +41,11 @@ for wangle = 1:numel(ww)
         nodevibCoe = readmatrix(inputfilename);
         % 把vibCoe压缩到0-3或0-6
         nodeOptimvibCoe = optimizedata(nodevibCoe);
+        % plot contour picture to check
+        checknodevibCoe(nodeOptimvibCoe,w,direct,node_x,node_y);
         % convert node vibration coefficients to block vibration coefficients
         blockvibCoe = node2block(nodeOptimvibCoe, basicrect5);
-        
+        % plot contour picture to check
         checkblockvibCoe(blockvibCoe,w,direct);
 %         newFileName = strcat(outputdir,"block336OptimVibCoe",direct,num2str(w), ".csv");
 %         writematrix(blockvibCoe,newFileName);
@@ -89,9 +96,9 @@ function checkblockvibCoe(blockvibCoe,w,direct)
     [xq, yq] = meshgrid(linspace(1, 28, 280), linspace(1, 4, 40)); % 插值后的网格
         
     % 对每个矩阵进行插值
-    Aq1 = interp2(x, y, A1, xq, yq, 'cubic');
-    Aq2 = interp2(x, y, A2, xq, yq, 'cubic');
-    Aq3 = interp2(x, y, A3, xq, yq, 'cubic');
+    Aq1 = interp2(x, y, A1, xq, yq, 'spline');
+    Aq2 = interp2(x, y, A2, xq, yq, 'spline');
+    Aq3 = interp2(x, y, A3, xq, yq, 'spline');
     
     % 绘制云图
     figure;
@@ -116,7 +123,7 @@ function checkblockvibCoe(blockvibCoe,w,direct)
     colorbar('Position', [0.92 0.11 0.02 0.815]); % 调整颜色条的位置
 end
 
-function checknodevibCoe(nodevibCoe,w,direct)
+function checknodevibCoe(nodevibCoe,w,direct,node_x, node_y)
     M = reshape(nodevibCoe,42,15);
     M = M';
     M = M(15:-1:1,:);
@@ -127,26 +134,27 @@ function checknodevibCoe(nodevibCoe,w,direct)
     A3 = M(11:15, :);
 
     % 定义目标矩阵的x和y坐标网格，对于每个矩阵进行插值
-    [x, y] = meshgrid(panelx_all(1:42), panely_all(1:42:210)); % node坐标
-    [xq, yq] = meshgrid(linspace(panelx_all(1), panelx_all(42), 420), linspace(panely_all(1), panely_all(210), 50)); % 10倍插值后的网格
+    [x, y] = meshgrid(node_x,node_y); % node坐标
+    [xq, yq] = meshgrid(linspace(node_x(1), node_x(end), 10*numel(node_x)), linspace(node_y(1), node_y(end), 10*numel(node_y))); % 10倍插值后的网格
         
     % 对每个矩阵进行插值
-    Aq1 = interp2(x, y, A1, xq, yq, 'cubic');
-    Aq2 = interp2(x, y, A2, xq, yq, 'cubic');
-    Aq3 = interp2(x, y, A3, xq, yq, 'cubic');
+    % 'cubic' 方法要求网格具有一致的间距。
+    % 由于不满足此条件，该方法将会从 'cubic' 切换到 'spline'。
+    Aq1 = interp2(x, y, A1, xq, yq, 'spline');
+    Aq2 = interp2(x, y, A2, xq, yq, 'spline');
+    Aq3 = interp2(x, y, A3, xq, yq, 'spline');
     
     % 绘制云图
     figure;
     subplot(3,1,1);
     contourf(xq, yq, Aq1, 50);
-    title('Part 3');
+    title(strcat('Part3: vibCoe plot windangle: ', num2str(w),direct));
     subplot(3,1,2);
     contourf(xq, yq, Aq2, 50);
-    title('Part 2');
+    title(strcat('Part2: vibCoe plot windangle: ', num2str(w), direct));
     subplot(3,1,3);
     contourf(xq, yq, Aq3, 50);
-    title('Part 1');
-    title(strcat('vibCoe plot ',direct, num2str(w)));
+    title(strcat('Part1: vibCoe plot windangle: ', num2str(w), direct));
 
     % 调整颜色轴以共用同一个颜色轴
     cmin = min([Aq1(:); Aq2(:); Aq3(:)]);

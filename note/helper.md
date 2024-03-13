@@ -909,6 +909,14 @@ quantile(nodevibCoe, 0.95)
 
 ![25inclination30windangle_nodes_UZ_average_overtime](25inclination30windangle_nodes_UZ_average_overtime.png)
 
+### 插值画云图的问题
+
+![插值画云图问题描述](插值画云图问题描述.png)
+
+左边是用方法2画的，右边是方法1画的
+
+![插值画云图的问题](插值画云图的问题.png)
+
 ## 9Matlab Parallel Computing ToolBox
 
 > Parallel Computing Toolbox™ lets you solve computationally and data-intensive problems using multicore processors, GPUs, and computer clusters. High-level constructs—parallel for-loops, special array types, and parallelized numerical algorithms—enable you to parallelize MATLAB® applications without CUDA or MPI programming. The toolbox lets you use parallel-enabled functions in MATLAB and other toolboxes. You can use the toolbox with Simulink® to run multiple simulations of a model in parallel. Programs and models can run in both interactive and batch modes.
