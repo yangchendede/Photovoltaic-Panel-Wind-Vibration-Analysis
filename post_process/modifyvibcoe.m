@@ -11,7 +11,7 @@ ww = 0:10:180;
 directionlist = ["X_", "Y_", "Z_"];
 
 % selected condition
-inclination = inclinationlist(1);
+inclination = inclinationlist(6);
 
 % 每个分区包含的node
 basicrect1 = [101,102,144,143]';
@@ -41,14 +41,14 @@ for wangle = 1:numel(ww)
         nodevibCoe = readmatrix(inputfilename);
         % 把vibCoe压缩到0-3或0-6
         nodeOptimvibCoe = optimizedata(nodevibCoe);
-        % plot contour picture to check
-        checknodevibCoe(nodeOptimvibCoe,w,direct,node_x,node_y);
+        
         % convert node vibration coefficients to block vibration coefficients
         blockvibCoe = node2block(nodeOptimvibCoe, basicrect5);
-        % plot contour picture to check
-        checkblockvibCoe(blockvibCoe,w,direct);
-%         newFileName = strcat(outputdir,"block336OptimVibCoe",direct,num2str(w), ".csv");
-%         writematrix(blockvibCoe,newFileName);
+        
+        newFileName1 = strcat(outputdir,"node630OptimVibCoe",direct,num2str(w), ".csv");
+        newFileName2 = strcat(outputdir,"block336OptimVibCoe",direct,num2str(w), ".csv");
+        writematrix(nodeOptimvibCoe,newFileName1);
+        writematrix(blockvibCoe,newFileName2);
     end
 end
 
@@ -79,89 +79,4 @@ function value = optimizedata(data)
     end
     value = data;
     
-end
-
-function checkblockvibCoe(blockvibCoe,w,direct)
-    M = reshape(blockvibCoe,28,12);
-    M = M';
-    M = M(12:-1:1,:);
-
-    % 分割原始矩阵为三个4x28矩阵
-    A1 = M(1:4, :);
-    A2 = M(5:8, :);
-    A3 = M(9:12, :);
-
-    % 定义目标矩阵的x和y坐标网格，对于每个矩阵进行插值
-    [x, y] = meshgrid(1:28, 1:4); % y轴插值从1到4，分成40个点
-    [xq, yq] = meshgrid(linspace(1, 28, 280), linspace(1, 4, 40)); % 插值后的网格
-        
-    % 对每个矩阵进行插值
-    Aq1 = interp2(x, y, A1, xq, yq, 'spline');
-    Aq2 = interp2(x, y, A2, xq, yq, 'spline');
-    Aq3 = interp2(x, y, A3, xq, yq, 'spline');
-    
-    % 绘制云图
-    figure;
-    subplot(3,1,1);
-    contourf(xq, yq, Aq1, 50);
-    title('Part 3');
-    subplot(3,1,2);
-    contourf(xq, yq, Aq2, 50);
-    title('Part 2');
-    subplot(3,1,3);
-    contourf(xq, yq, Aq3, 50);
-    title('Part 1');
-    title(strcat('vibCoe plot ',direct, num2str(w)));
-
-    % 调整颜色轴以共用同一个颜色轴
-    cmin = min([Aq1(:); Aq2(:); Aq3(:)]);
-    cmax = max([Aq1(:); Aq2(:); Aq3(:)]);
-    for i = 1:3
-        subplot(3,1,i);
-        caxis([cmin cmax]);
-    end
-    colorbar('Position', [0.92 0.11 0.02 0.815]); % 调整颜色条的位置
-end
-
-function checknodevibCoe(nodevibCoe,w,direct,node_x, node_y)
-    M = reshape(nodevibCoe,42,15);
-    M = M';
-    M = M(15:-1:1,:);
-
-    % 分割原始矩阵为三个5x42矩阵
-    A1 = M(1:5, :);
-    A2 = M(6:10, :);
-    A3 = M(11:15, :);
-
-    % 定义目标矩阵的x和y坐标网格，对于每个矩阵进行插值
-    [x, y] = meshgrid(node_x,node_y); % node坐标
-    [xq, yq] = meshgrid(linspace(node_x(1), node_x(end), 10*numel(node_x)), linspace(node_y(1), node_y(end), 10*numel(node_y))); % 10倍插值后的网格
-        
-    % 对每个矩阵进行插值
-    % 'cubic' 方法要求网格具有一致的间距。
-    % 由于不满足此条件，该方法将会从 'cubic' 切换到 'spline'。
-    Aq1 = interp2(x, y, A1, xq, yq, 'spline');
-    Aq2 = interp2(x, y, A2, xq, yq, 'spline');
-    Aq3 = interp2(x, y, A3, xq, yq, 'spline');
-    
-    % 绘制云图
-    figure;
-    subplot(3,1,1);
-    contourf(xq, yq, Aq1, 50);
-    title(strcat('Part3: vibCoe plot windangle: ', num2str(w),direct));
-    subplot(3,1,2);
-    contourf(xq, yq, Aq2, 50);
-    title(strcat('Part2: vibCoe plot windangle: ', num2str(w), direct));
-    subplot(3,1,3);
-    contourf(xq, yq, Aq3, 50);
-    title(strcat('Part1: vibCoe plot windangle: ', num2str(w), direct));
-
-    % 调整颜色轴以共用同一个颜色轴
-    cmin = min([Aq1(:); Aq2(:); Aq3(:)]);
-    cmax = max([Aq1(:); Aq2(:); Aq3(:)]);
-    for i = 1:3
-        subplot(3,1,i);
-        caxis([cmin cmax]);
-    end
-    colorbar('Position', [0.92 0.11 0.02 0.815]); % 调整颜色条的位置
 end
