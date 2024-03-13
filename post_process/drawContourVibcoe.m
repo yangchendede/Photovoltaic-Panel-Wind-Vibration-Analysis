@@ -11,7 +11,7 @@ ww = 0:10:180;
 directionlist = ["X_", "Y_", "Z_"];
 
 % selected condition
-for inclinationN = 2:6
+for inclinationN = 1:numel(inclinationlist)
     inclination = inclinationlist(inclinationN);
     
     
@@ -43,20 +43,21 @@ for inclinationN = 2:6
             blockvibCoe = readmatrix(inputfilename2);
             % plot contour picture to check
             directp = "Z";
-            checknodevibCoe(nodeOptimvibCoe, blockvibCoe, w,directp,node_x,node_y, outputdir);
+%             drawblockvibCoe(blockvibCoe,w,direct)
+            drawnodevibCoe(nodeOptimvibCoe, blockvibCoe, w,directp,node_x,node_y, outputdir);
     %         checkblockvibCoe(blockvibCoe,w,direct);
         end
     end
 end
-function checkblockvibCoe(blockvibCoe,w,direct)
+function drawblockvibCoe(blockvibCoe,w,direct)
     M = reshape(blockvibCoe,28,12);
     M = M';
     M = M(12:-1:1,:);
 
     % 分割原始矩阵为三个4x28矩阵
-    A1 = M(1:4, :);
-    A2 = M(5:8, :);
-    A3 = M(9:12, :);
+    A1 = M(4:-1:1, :);
+    A2 = M(8:-1:5, :);
+    A3 = M(12:-1:9, :);
 
     % 定义目标矩阵的x和y坐标网格，对于每个矩阵进行插值
     [x, y] = meshgrid(1:28, 1:4); % y轴插值从1到4，分成40个点
@@ -90,7 +91,7 @@ function checkblockvibCoe(blockvibCoe,w,direct)
     colorbar('Position', [0.92 0.11 0.02 0.815]); % 调整颜色条的位置
 end
 
-function checknodevibCoe(nodevibCoe,blockvibCoe, w,direct,node_x, node_y, outputdir)
+function drawnodevibCoe(nodevibCoe,blockvibCoe, w,direct,node_x, node_y, outputdir)
     M = reshape(nodevibCoe,42,15);
     M = M';
     M = M(15:-1:1,:);
@@ -101,13 +102,13 @@ function checknodevibCoe(nodevibCoe,blockvibCoe, w,direct,node_x, node_y, output
 
 
     % 分割原始矩阵为三个5x42矩阵
-    A1 = M(1:5, :);
-    A2 = M(6:10, :);
-    A3 = M(11:15, :);
+    A1 = M(5:-1:1, :);
+    A2 = M(10:-1:6, :);
+    A3 = M(15:-1:11, :);
     % 分割原始矩阵为三个4x28矩阵
-    valueMatrix1 = M2(1:4, :);
-    valueMatrix2 = M2(5:8, :);
-    valueMatrix3 = M2(9:12, :);
+    valueMatrix1 = M2(4:-1:1, :);
+    valueMatrix2 = M2(8:-1:5, :);
+    valueMatrix3 = M2(12:-1:9, :);
     % 定义目标矩阵的x和y坐标网格，对于每个矩阵进行插值
     [x, y] = meshgrid(node_x,node_y); % node坐标
     [xq, yq] = meshgrid(linspace(node_x(1), node_x(end), 10*numel(node_x)), linspace(node_y(1), node_y(end), 10*numel(node_y))); % 10倍插值后的网格
@@ -120,7 +121,6 @@ function checknodevibCoe(nodevibCoe,blockvibCoe, w,direct,node_x, node_y, output
     Aq3 = interp2(x, y, A3, xq, yq, 'spline');
 
     parts = {Aq1, Aq2, Aq3};
-    titles = {'Part 3', 'Part 2', 'Part 1'};
     
     figure;
     set(gcf, 'Units', 'inches', 'Position', [0, 0, 10.9, 7.5]); % 图形尺寸设置为7.5x10.9英寸匹配A4纸
@@ -170,7 +170,8 @@ function checknodevibCoe(nodevibCoe,blockvibCoe, w,direct,node_x, node_y, output
                 text(textX, textY, sprintf('%5.2f', textValue), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'FontSize', 8, 'Color', 'k');
             end
         end
-        
+        axis tight;
+        axis off;
         hold off;
     end
 

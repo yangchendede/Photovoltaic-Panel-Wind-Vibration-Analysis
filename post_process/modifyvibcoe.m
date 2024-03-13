@@ -10,48 +10,49 @@ inclinationlist=5:5:30;
 ww = 0:10:180;
 directionlist = ["X_", "Y_", "Z_"];
 
-% selected condition
-inclination = inclinationlist(6);
-
-% 每个分区包含的node
-basicrect1 = [101,102,144,143]';
-basicrect2 = [basicrect1, basicrect1+1];
-basicrect3 = [basicrect2, basicrect2+42, basicrect2+42*2, basicrect2+42*3];
-basicrect4 = basicrect3;
-for i = 1:13
-    basicrect4 = [basicrect4, basicrect3+3*i];
-end
-basicrect5 = [basicrect4, basicrect4+210,basicrect4+210*2] - 100;
-
-%meshgrid 用的node的xy坐标
-load("../model/panelnodeall.mat");
-node_x = panelx_all(1:42);
-node_y = panely_all(1:42:210);
-
-% input output dir
-inputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(inclination),"inclination/", "vibCoe/");
-outputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(inclination),"inclination/", "vibCoe/");
-
-directionlist = ["Z_"];
-
-for wangle = 1:numel(ww)
-    w = ww(wangle);
-    for direct = directionlist
-        inputfilename = strcat(inputdir,"vibCoe",direct,num2str(w), ".csv");
-        nodevibCoe = readmatrix(inputfilename);
-        % 把vibCoe压缩到0-3或0-6
-        nodeOptimvibCoe = optimizedata(nodevibCoe);
-        
-        % convert node vibration coefficients to block vibration coefficients
-        blockvibCoe = node2block(nodeOptimvibCoe, basicrect5);
-        
-        newFileName1 = strcat(outputdir,"node630OptimVibCoe",direct,num2str(w), ".csv");
-        newFileName2 = strcat(outputdir,"block336OptimVibCoe",direct,num2str(w), ".csv");
-        writematrix(nodeOptimvibCoe,newFileName1);
-        writematrix(blockvibCoe,newFileName2);
+for inclinationN = 1:numel(inclinationlist)
+    % selected condition
+    inclination = inclinationlist(inclinationN);
+    
+    % 每个分区包含的node
+    basicrect1 = [1,2,44,43;2,3,45,44]';
+    repeated = repmat(basicrect1, 1, 14);
+    increments = repmat(0:3:3*13, 2, 1);
+    increments = increments(:)';
+    increments = repmat(increments,4,1);
+    basicrect2 = repeated + increments;
+    basicrect3 = [basicrect2, basicrect2 + 42, basicrect2 + 42*2, basicrect2 + 42*3];
+    basicrect4 = [basicrect3, basicrect3 + 210, basicrect3 + 210*2];
+    
+    %meshgrid 用的node的xy坐标
+    load("../model/panelnodeall.mat");
+    node_x = panelx_all(1:42);
+    node_y = panely_all(1:42:210);
+    
+    % input output dir
+    inputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(inclination),"inclination/", "vibCoe/");
+    outputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(inclination),"inclination/", "vibCoe/");
+    
+    directionlist = ["Z_"];
+    
+    for wangle = 1:numel(ww)
+        w = ww(wangle);
+        for direct = directionlist
+            inputfilename = strcat(inputdir,"vibCoe",direct,num2str(w), ".csv");
+            nodevibCoe = readmatrix(inputfilename);
+            % 把vibCoe压缩到0-3或0-6
+            nodeOptimvibCoe = optimizedata(nodevibCoe);
+            
+            % convert node vibration coefficients to block vibration coefficients
+            blockvibCoe = node2block(nodeOptimvibCoe, basicrect4);
+            
+            newFileName1 = strcat(outputdir,"node630OptimVibCoe",direct,num2str(w), ".csv");
+            newFileName2 = strcat(outputdir,"block336OptimVibCoe",direct,num2str(w), ".csv");
+            writematrix(nodeOptimvibCoe,newFileName1);
+            writematrix(blockvibCoe,newFileName2);
+        end
     end
 end
-
 function  value = node2block(valueMatrix,indexMatrix)
     % convert node vibration coefficients to block vibration coefficients
     % valueMatrix: apdl里node算出的风振结果

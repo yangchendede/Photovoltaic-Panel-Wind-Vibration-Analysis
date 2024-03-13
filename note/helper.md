@@ -917,6 +917,38 @@ quantile(nodevibCoe, 0.95)
 
 ![插值画云图的问题](插值画云图的问题.png)
 
+**原因1: 求均值时点拿错了 basicrect 算错了。**
+
+
+
+**原因2: M(1,1) contour时画在右下角**
+
+注意contour时M(1,1)分配的是X(1)和Y(1)定义的位置，往往X(1)=Xmin, Y(1)=Ymin，因此M(1,1)图时在左下角，然而在矩阵表格中显示在右上角。
+
+```
+function plotnodedisp(nodeValue,blockValue,node_x, node_y, outputdir, title)
+    % value用mm单位展示，因为太多小数点占文字位置
+    % 列顺序存储的M，第一个元素代表0度第一排迎风左下角第一个元素。
+    % M = M(15:-1:1,:);后M(15,1)矩阵左下角第一个元素正好和我的命名匹配
+    % 后续A3 = M(15:-1:11,);取出0度第一排迎风光伏板的点，注意此时倒序取，把M(15,:)换到了M(11,:)
+    % 对应于A3(1,:)，矩阵视图来看在左上角，但contour时给他的是xmin和ymin
+    % 画在plot的左下角，这和光伏板放置方式才匹配
+    M = nodeValue*1000;
+    M = reshape(M,42,15);
+    M = M';
+    M = M(15:-1:1,:);
+    M2 = blockValue*1000; % m -> mm
+    M2 = reshape(M2,28,12);
+    M2 = M2';
+    M2 = M2(12:-1:1,:);
+    % 分割原始矩阵为三个5x42矩阵
+    A1 = M(5:-1:1, :);
+    A2 = M(10:-1:6, :);
+    A3 = M(15:-1:11, :);
+```
+
+
+
 ## 9Matlab Parallel Computing ToolBox
 
 > Parallel Computing Toolbox™ lets you solve computationally and data-intensive problems using multicore processors, GPUs, and computer clusters. High-level constructs—parallel for-loops, special array types, and parallelized numerical algorithms—enable you to parallelize MATLAB® applications without CUDA or MPI programming. The toolbox lets you use parallel-enabled functions in MATLAB and other toolboxes. You can use the toolbox with Simulink® to run multiple simulations of a model in parallel. Programs and models can run in both interactive and batch modes.
