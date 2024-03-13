@@ -1,7 +1,7 @@
 % 定义包含图片的文件夹路径
-picturePath = "D:\Photovoltaic_system\apdl_fengzhen_result\30inclination\vibCoePic"; % 请替换为实际路径
+picturePath = "D:\Photovoltaic_system\apdl_fengzhen_result\30inclination\extremeDisp"; % 请替换为实际路径
 % 定义你要追加内容的Word文档路径
-docPath = 'D:\Photovoltaic_system\Photovoltaic-Panel-Wind-Vibration-Analysis\report\vibCoeZ.docx'; % 请替换为实际Word文档路径
+docPath = 'D:\Photovoltaic_system\Photovoltaic-Panel-Wind-Vibration-Analysis\report\extremeDisp.docx'; % 请替换为实际Word文档路径
 title_all = "光伏支架30度倾角";
 
 
@@ -45,7 +45,18 @@ for i = 1:length(images)
     selection.TypeParagraph; % 在图片下方创建一个新段落
     
     % 插入并居中文件名
-    selection.TypeText(strcat(title_all, images(i).name, "风向角法向风振系数"));
+    if images(i).name ==  "dispmaxZ.png"
+        title = strcat(title_all, "全风向角法向位移极大值 (mm)");
+    elseif images(i).name ==  "dispminZ.png"
+        title = strcat(title_all, "全风向角法向位移极小值 (mm)");
+    elseif images(i).name ==  "dispmaxZangle.png"
+        title = strcat(title_all, "法向位移极大值对应风向角");
+    elseif images(i).name ==  "dispminZangle.png"
+        title = strcat(title_all, "法向位移极小值对应风向角");
+    else
+        title = strcat(title_all, images(i).name);
+    end
+    selection.TypeText(title);
     selection.ParagraphFormat.Alignment = 1; % 居中对齐
     selection.TypeParagraph; % 在文件名下方创建一个新段落
     
