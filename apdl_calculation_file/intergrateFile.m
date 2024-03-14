@@ -1,6 +1,6 @@
 % 分析模式
 analysisoptions = ["zhaoxing","modalAnalysis","transientAnalysis"];
-analysisMode = analysisoptions(3);
+analysisMode = analysisoptions(1);
 
 % 工况选择
 condition_inclination = ["5度","10度","15度","20度","25度","30度","15度不带撑杆","30度不带撑杆"]; % "15度单跨-空风洞", "15度单跨"还没有做
@@ -9,7 +9,7 @@ condition_inclinationEn = [5,10,15,20,25,30];
 conditionNu = 6;
 condition = condition_inclinationEn(conditionNu);
 
-for w = ww
+for w = ww(1)
     writeflag = 0;
     % Save file names in order
     if analysisMode == "zhaoxing"

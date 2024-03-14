@@ -1,0 +1,9 @@
+nsel,all
+*dim,nodez,array,630,1
+*do,i,101,730
+*get,nodez(i-100,1),node,i,loc,z
+*enddo
+*CFOPEN,nodeZ,txt
+*VWRITE,nodez(1)
+(F8.5)
+*CFCLOSE
