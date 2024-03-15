@@ -1028,7 +1028,9 @@ delete(wordApp);
 
 
 
-## 10Matlab Parallel Computing ToolBox
+## 10Parallel Computing
+
+### Matlab Parallel Computing
 
 > Parallel Computing Toolbox™ lets you solve computationally and data-intensive problems using multicore processors, GPUs, and computer clusters. High-level constructs—parallel for-loops, special array types, and parallelized numerical algorithms—enable you to parallelize MATLAB® applications without CUDA or MPI programming. The toolbox lets you use parallel-enabled functions in MATLAB and other toolboxes. You can use the toolbox with Simulink® to run multiple simulations of a model in parallel. Programs and models can run in both interactive and batch modes.
 
@@ -1060,17 +1062,39 @@ if every loops are independent, then you can change `for end` to `parfor end` .
 
 <img src="parallelmatlab2.jpg" alt="image-20240312203046032" style="zoom:50%;" />
 
+### APDL Parallel Computing
+
+I don't know how to use parallel computing in one apdl process（进程).
+
+***But***
+
+One APDL process is running on **one particular working dictionary**. You can run several APDL processes in different working dictionary. 
+
+The number of APDL process you can run depends on PC's CPU and Memory ability.
+
+***how to do***
+
+* Choose APDL working dictionary at APDL launcher.
+
+  <img src="apdllauncher.png" style="zoom:60%;" />
+
+* Check PC's CPU and Memory ability
+
+  <img src="APDLMemoryOccupancy" alt="image-20240315201323514" style="zoom: 67%;" />
+
 ## Still need to Explore
 
 ### 第二跨出现不合理位移
 
 ***25inclination 30inclination, 0,10,20,30windangle 第二跨出现正位移，但风压应该把它往下压才对，需要进一步研究***
 
-### 调整重力作用方向，坐标变换
+### Adjust the Direction of Gravity & Coordinate Transformation
 
 <img src="坐标变换.jpg" alt="坐标变换" style="zoom:50%;" />
 
 **conclution**
+
+
 $$
 \left \{ 
 \begin{array}{l}

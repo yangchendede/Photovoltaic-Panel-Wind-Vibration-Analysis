@@ -11,10 +11,10 @@ timestep = 2800;
 nnodestart=101;
 NVAR = 3;
 
-conditionNu = 6;
+conditionNu = 5;
 condition = condition_inclinationEn(conditionNu);
 
-outputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(condition),"inclination/");
+outputdir = strcat("D:/Photovoltaic_system/apdl_fengzhen_result/",num2str(condition),"inclination_adjustGravity/");
 
 outputparameter = ["UX","UY","UZ"];
 %% open the file

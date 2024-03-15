@@ -1,0 +1,20 @@
+!/INPUT, Fname, Ext, Dir, LINE, LOG
+/INPUT, intergratedFile25inclination0windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination10windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination20windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination30windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination40windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination50windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination60windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination70windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination80windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination90windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination100windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination110windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination120windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination130windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination140windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination150windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination160windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination170windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
+/INPUT, intergratedFile25inclination180windangle, txt, D:/Photovoltaic_system/Photovoltaic-Panel-Wind-Vibration-Analysis/apdl_calculation_file, 0
