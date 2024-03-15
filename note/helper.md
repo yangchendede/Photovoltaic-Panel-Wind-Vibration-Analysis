@@ -732,7 +732,7 @@ nnode=ndnext(nnode)  !获取下一个节点编号
 
 
 
-## 7Post Processing
+## 7APDL Post Processing
 
 ### write result into txt file
 
@@ -815,15 +815,9 @@ GUI: general postproc->plot result->contour plot->nodal solution
 
 ## 8 Result
 
-### Nodes time history displacement
+### Computation Theory
 
-#### Demo
-
-mid-span and quarter-span normal displacementand
-
-![timedisplacementdemo](timedisplacementdemo.png)
-
-### Nodes time history Velocity, Acceleration
+#### Nodes time history Velocity, Acceleration
 
 **Obtained from displacement difference**
 
@@ -839,15 +833,49 @@ mid-span and quarter-span normal displacementand
  velo_matrix = velo_matrix(2:end,:);
 ```
 
-### Nodes Statistics overtime
+#### Nodes Statistics overtime
 
 * X, Y, Z
-
 * U, V, A
-
 * avg, std
 
-### Nodes Vibration Coefficient and Distribution
+#### Nodes Vibration Coefficient and Distribution
+
+**vibration coefficient**
+
+```matlab
+vibcoe_disp = 1+g.*disp_std./abs(disp_avg);
+```
+
+**95% quantile**
+
+```matlab
+quantile(nodevibCoe, 0.95)
+```
+
+如果 **95% quantile**值很大，说明该工况整个风振系数结果不合理。
+
+**resonable**
+
+* 5inclination, 10inclination, 15inclination, 20inclination
+
+* **5inclination0windangle nodes UZ average overtime**
+
+<img src="5inclination0windangle_nodes_UZ_average_overtime.png" alt="5inclination0windangle_nodes_UZ_average_overtime" style="zoom:50%;" />
+
+**unresonable**
+
+* 25inclination, 30inclination
+
+* **25inclination0windangle nodes UZ average overtime**
+
+<img src="25inclination0windangle_nodes_UZ_average_overtime.png" alt="25inclination0windangle_nodes_UZ_average_overtime" style="zoom:50%;" />
+
+### Data reliability analysis
+
+#### Nodes Vibration Coefficient and Distribution
+
+***25inclination 30inclination, 0,10,20,30windangle 第二跨出现正位移，但风压应该把它往下压才对，需要进一步研究*** 
 
 **vibration coefficient**
 
@@ -908,6 +936,10 @@ quantile(nodevibCoe, 0.95)
 **25inclination30windangle nodes UZ average overtime**
 
 ![25inclination30windangle_nodes_UZ_average_overtime](25inclination30windangle_nodes_UZ_average_overtime.png)
+
+### Ploting Theory
+
+
 
 ### 插值画云图的问题
 
@@ -1027,3 +1059,39 @@ if every loops are independent, then you can change `for end` to `parfor end` .
 **too many workers:**
 
 <img src="parallelmatlab2.jpg" alt="image-20240312203046032" style="zoom:50%;" />
+
+## Still need to Explore
+
+### 第二跨出现不合理位移
+
+***25inclination 30inclination, 0,10,20,30windangle 第二跨出现正位移，但风压应该把它往下压才对，需要进一步研究***
+
+### 调整重力作用方向，坐标变换
+
+<img src="坐标变换.jpg" alt="坐标变换" style="zoom:50%;" />
+
+**conclution**
+$$
+\left \{ 
+\begin{array}{l}
+ a_{x'}=0\\ 
+ a_{y'}=g*sin(\theta)\\ 
+a_{z'}=g*cos(\theta)
+\end{array}
+\right.
+$$
+
+$$
+\begin{align}
+X&=R*X'\\
+R&=
+\left[
+\begin{matrix}
+1&0&0\\
+0&cos(\theta)&sin(\theta)\\
+0&-sin(\theta)&cos(\theta)
+\end{matrix}
+\right]
+\end{align}
+$$
+
