@@ -2,17 +2,16 @@
 
 ## What I done
 
-* I maintain an apdl analysis case.
+* I maintain an **APDL analysis case**.
 
-* the file structure follows the finite element analysis process. 
+* the file structure follows the **finite element analysis process**. 
 
 * APDL output is time history dynamic response.
 
-* Matlab reads APDL output, analyzes the data and comes to interesting conclusion 
+* **Matlab reads APDL output**, analyzes the data and comes to interesting conclusion 
 
 * Include matlab code, apdl script, and supporting documentation.
 
-  
 
 ## File Structure
 
@@ -44,8 +43,6 @@
 
   ***note/ helper.md is useful.***
 
-  
-
 * **post_process**
 
   | Fucntion                                                     | Script Name                                |
@@ -71,13 +68,13 @@ If not consider the time cost in read and write, storing **one condition, one cl
 
 there are many ways to organize the parameter table:
 
-1.  one variable table
+1.  one variable table with **multi column**
 
    | variable number | time | value |
    | --------------- | ---- | ----- |
    | ...             | ...  | ...   |
 
-2. **one variable table**
+2. **one variable table with one column** 
 
    you can give variable storage order beyond the table, give time storage order beyond the table. Then the table do not need to store number and time. This strategy can reduce the space occupied.
 
@@ -87,7 +84,7 @@ there are many ways to organize the parameter table:
    | -------------- |
    | ...            |
 
-   **Most data is stored this way**
+   **Most data is stored in one column table**
 
    **example**
 
